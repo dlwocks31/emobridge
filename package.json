@@ -6,15 +6,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "@blocknote/core": "^0.8.2",
+    "@blocknote/react": "^0.8.2",
     "@supabase/auth-helpers-nextjs": "^0.7.3",
     "@supabase/supabase-js": "^2.26.0",
     "autoprefixer": "10.4.14",
     "next": "^13.4.11",
+    "partykit": "^0.0.0-39cf5ce",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.2",
-    "typescript": "5.1.3"
+    "ts-pattern": "^5.0.4",
+    "typescript": "5.1.3",
+    "y-partykit": "^0.0.0-39cf5ce",
+    "yjs": "^13.6.7"
   },
   "devDependencies": {
     "@types/node": "20.3.1",
