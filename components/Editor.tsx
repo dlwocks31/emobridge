@@ -46,9 +46,8 @@ const Editor = ({
   onEditorReady,
   setTextCursorBlockId,
 }: {
-  selectedEmoji: string;
   onEditorReady?: (editor: BlockNoteEditor<MyBlockSchema> | null) => void;
-  setTextCursorBlockId: (blockId: string | null) => void;
+  setTextCursorBlockId?: (blockId: string | null) => void;
 }) => {
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
@@ -99,7 +98,6 @@ const Editor = ({
         color: "#ff0000",
       },
     },
-    editable: false,
     blockSchema: {
       // Adds all default blocks.
       ...defaultBlockSchema,
@@ -109,7 +107,9 @@ const Editor = ({
     onTextCursorPositionChange: (editor: BlockNoteEditor<MyBlockSchema>) => {
       const hoveredBlock: Block = editor.getTextCursorPosition().block;
       console.log("textCursorPosition", editor.getTextCursorPosition());
-      setTextCursorBlockId(hoveredBlock.id);
+      if (setTextCursorBlockId) {
+        setTextCursorBlockId(hoveredBlock.id);
+      }
       console.log("onTextCursorPositionChange", hoveredBlock);
     },
   });
