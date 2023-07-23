@@ -16,6 +16,7 @@ import {
 import { useEffect, useMemo } from "react";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
+import { Emoji } from "./Emoji";
 
 export type MyBlockSchema = BlockSchema & {
   emoji: {
@@ -76,9 +77,10 @@ const Editor = ({
           alert(`Emoji ${block.props.emoji} at block ${block.id} is clicked`)
         }
       >
-        <div className="absolute -left-24 inline-flex h-16 w-16 items-center justify-center rounded-full bg-gray-500">
-          {block.props.emoji}
-        </div>
+
+        <Emoji
+          emoji={block.props.emoji}
+        />
         <InlineContent />
       </div>
     ),
@@ -97,6 +99,7 @@ const Editor = ({
         color: "#ff0000",
       },
     },
+    editable: false,
     blockSchema: {
       // Adds all default blocks.
       ...defaultBlockSchema,
