@@ -6,7 +6,7 @@ export default function Notetaker() {
     <>
       <div className="w-full">
         <div className="p-12">
-          <Editor />
+          <Editor editable={true} />
         </div>
       </div>
     </>

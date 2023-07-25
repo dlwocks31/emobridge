@@ -87,6 +87,7 @@ export default function Index() {
         </div>
         <div className="p-12">
           <Editor
+            editable={true}
             onEditorReady={handleEditorReady}
             setTextCursorBlockId={setTextCursorBlockId}
           />

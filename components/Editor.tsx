@@ -48,9 +48,11 @@ type Block = BlockOriginal<MyBlockSchema>;
 export const Editor = ({
   onEditorReady,
   setTextCursorBlockId,
+  editable,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
+  editable: boolean;
 }) => {
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
@@ -84,10 +86,10 @@ export const Editor = ({
       </div>
     ),
   });
-  InlineContent;
 
   // Creates a new editor instance.
   const editor: BlockNoteEditor | null = useBlockNote({
+    editable,
     collaboration: {
       provider,
       // Where to store BlockNote data in the Y.Doc:
@@ -119,6 +121,12 @@ export const Editor = ({
       onEditorReady(editor);
     }
   }, [editor, onEditorReady]);
+
+  useEffect(() => {
+    if (editor) {
+      editor.isEditable = editable;
+    }
+  }, [editable, editor]);
 
   // Renders the editor instance using a React component.
   return (

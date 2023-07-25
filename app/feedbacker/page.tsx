@@ -48,6 +48,8 @@ export default function Feedbacker() {
     }
   };
 
+  const [editable, setEditable] = useState(false);
+
   return (
     <>
       <div className="w-full">
@@ -63,8 +65,19 @@ export default function Feedbacker() {
             </button>
           ))}
         </div>
+        <div className="flex justify-center items-center mt-2">
+          <input
+            type="checkbox"
+            id="checkbox"
+            checked={editable}
+            onChange={() => setEditable(!editable)}
+            className="h-5 w-5 mr-2"
+          />
+          <label htmlFor="checkbox">편집 활성화</label>
+        </div>
         <div className="p-12">
           <Editor
+            editable={editable}
             onEditorReady={handleEditorReady}
             setTextCursorBlockId={setTextCursorBlockId}
           />
