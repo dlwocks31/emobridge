@@ -11,10 +11,9 @@ import "@blocknote/core/style.css";
 import {
   BlockNoteView,
   createReactBlockSpec,
-  InlineContent,
   useBlockNote,
 } from "@blocknote/react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import { Emoji } from "./Emoji";
@@ -75,18 +74,21 @@ export const Editor = ({
     },
     containsInlineContent: false,
     render: ({ block }) => (
-      <div
-        className="relative "
-        onClick={() =>
-          alert(`Emoji ${block.props.emoji} at block ${block.id} is clicked`)
-        }
-      >
-        <Emoji emoji={block.props.emoji} />
-        <InlineContent />
+      <div className="absolute">
+        <div
+          className="relative -left-24 -top-3"
+          onClick={() => {
+            console.log("removeBlocks", block.id);
+            editorRef.current?.removeBlocks([block]);
+          }}
+        >
+          <Emoji emoji={block.props.emoji} />
+        </div>
       </div>
     ),
   });
 
+  const editorRef = useRef<BlockNoteEditor | null>(null);
   // Creates a new editor instance.
   const editor: BlockNoteEditor | null = useBlockNote({
     editable,
@@ -115,6 +117,10 @@ export const Editor = ({
       console.log("onTextCursorPositionChange", hoveredBlock);
     },
   });
+
+  useEffect(() => {
+    editorRef.current = editor;
+  }, [editor]);
 
   useEffect(() => {
     if (onEditorReady) {
