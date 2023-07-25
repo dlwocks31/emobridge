@@ -1,9 +1,7 @@
 "use client";
 import Editor from "@/components/Editor";
-export const dynamic = "force-dynamic";
-const emojis = ["👍", "🤔", "🌟"]; // Your emoji list
 
-export default function Index() {
+export default function Notetaker() {
   return (
     <>
       <div className="w-full">

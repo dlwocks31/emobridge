@@ -4,10 +4,9 @@ import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { useState } from "react";
-export const dynamic = "force-dynamic";
 const emojis = ["👍", "🤔", "🌟"]; // Your emoji list
 
-export default function Index() {
+export default function Feedbacker() {
   const supabase = createClientComponentClient();
   const [channel] = useState<RealtimeChannel>(() =>
     supabase.channel("realtime:test"),
@@ -36,7 +35,7 @@ export default function Index() {
       })
       .catch(console.error);
     console.log(`You clicked on ${emoji}`);
-        if (textCursorBlockId) {
+    if (textCursorBlockId) {
       const block = editor?.getBlock(textCursorBlockId);
       if (block) {
         const blocksToInsert: PartialBlock<MyBlockSchema>[] = [
