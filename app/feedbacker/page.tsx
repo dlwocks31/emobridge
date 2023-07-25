@@ -1,6 +1,5 @@
 "use client";
-import Editor, { MyBlockSchema } from "@/components/Editor";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { BlockNoteEditor, Editor, PartialBlock } from "@/components/Editor";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { useState } from "react";
@@ -15,11 +14,9 @@ export default function Feedbacker() {
     null,
   );
 
-  const [editor, setEditor] = useState<BlockNoteEditor<MyBlockSchema> | null>(
-    null,
-  );
+  const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
-  const handleEditorReady = (editor: BlockNoteEditor<MyBlockSchema> | null) => {
+  const handleEditorReady = (editor: BlockNoteEditor | null) => {
     console.log("handleEditorReady");
     setEditor(editor);
   };
@@ -38,7 +35,7 @@ export default function Feedbacker() {
     if (textCursorBlockId) {
       const block = editor?.getBlock(textCursorBlockId);
       if (block) {
-        const blocksToInsert: PartialBlock<MyBlockSchema>[] = [
+        const blocksToInsert: PartialBlock[] = [
           {
             type: "emoji",
             props: {

@@ -1,16 +1,17 @@
 "use client"; // this registers <Editor> as a Client Component
 import {
-  BlockNoteEditor,
+  BlockNoteEditor as BlockNoteEditorOriginal,
   Block as BlockOriginal,
   BlockSchema,
   defaultBlockSchema,
   defaultProps,
+  PartialBlock as PartialBlockOriginal,
 } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import {
   BlockNoteView,
-  InlineContent,
   createReactBlockSpec,
+  InlineContent,
   useBlockNote,
 } from "@blocknote/react";
 import { useEffect, useMemo } from "react";
@@ -37,16 +38,18 @@ export type MyBlockSchema = BlockSchema & {
     };
   };
 };
+export type BlockNoteEditor = BlockNoteEditorOriginal<MyBlockSchema>;
+export type PartialBlock = PartialBlockOriginal<MyBlockSchema>;
 
 type Block = BlockOriginal<MyBlockSchema>;
 
 // Ref: https://github.com/TypeCellOS/BlockNote/blob/0ff6ed993eec400b3df720af95df26786770a3ea/packages/website/docs/.vitepress/theme/components/Examples/BlockNote/ReactBlockNote.tsx#L59
 // Our <Editor> component that we can now use
-const Editor = ({
+export const Editor = ({
   onEditorReady,
   setTextCursorBlockId,
 }: {
-  onEditorReady?: (editor: BlockNoteEditor<MyBlockSchema> | null) => void;
+  onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
 }) => {
   const [doc, provider] = useMemo(() => {
@@ -76,10 +79,7 @@ const Editor = ({
           alert(`Emoji ${block.props.emoji} at block ${block.id} is clicked`)
         }
       >
-
-        <Emoji
-          emoji={block.props.emoji}
-        />
+        <Emoji emoji={block.props.emoji} />
         <InlineContent />
       </div>
     ),
@@ -87,7 +87,7 @@ const Editor = ({
   InlineContent;
 
   // Creates a new editor instance.
-  const editor: BlockNoteEditor<MyBlockSchema> | null = useBlockNote({
+  const editor: BlockNoteEditor | null = useBlockNote({
     collaboration: {
       provider,
       // Where to store BlockNote data in the Y.Doc:
@@ -104,7 +104,7 @@ const Editor = ({
       // Adds the custom image block.
       emoji: EmojiBlock,
     },
-    onTextCursorPositionChange: (editor: BlockNoteEditor<MyBlockSchema>) => {
+    onTextCursorPositionChange: (editor: BlockNoteEditor) => {
       const hoveredBlock: Block = editor.getTextCursorPosition().block;
       console.log("textCursorPosition", editor.getTextCursorPosition());
       if (setTextCursorBlockId) {
@@ -127,5 +127,3 @@ const Editor = ({
     </div>
   );
 };
-
-export default Editor;

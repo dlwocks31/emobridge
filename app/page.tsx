@@ -4,7 +4,7 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { RealtimeChannel } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { P, match } from "ts-pattern";
-import Editor, { MyBlockSchema } from "../components/Editor";
+import { Editor, MyBlockSchema } from "../components/Editor";
 export const dynamic = "force-dynamic";
 const emojis = ["👍", "🤔", "🌟"]; // Your emoji list
 
@@ -87,7 +87,6 @@ export default function Index() {
         </div>
         <div className="p-12">
           <Editor
-            selectedEmoji={selectedEmoji}
             onEditorReady={handleEditorReady}
             setTextCursorBlockId={setTextCursorBlockId}
           />
