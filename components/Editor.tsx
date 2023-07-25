@@ -135,9 +135,11 @@ export const Editor = ({
   }, [editable, editor]);
 
   // Renders the editor instance using a React component.
-  return (
+  return editor ? (
     <div className="border-2">
-      <BlockNoteView editor={editor} />
+      {editor ? <BlockNoteView editor={editor} /> : <div>Loading...</div>}
     </div>
+  ) : (
+    <div className="text-center">에디터 로딩중..</div>
   );
 };
