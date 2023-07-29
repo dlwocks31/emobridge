@@ -2,10 +2,10 @@ import { NavigationBar } from "@/components/NagivationBar";
 import "./globals.css";
 export const metadata = {
   title: "Emobridge",
-
   description: "Emobridge",
 };
 
+export const dynamic = "force-dynamic";
 export default function RootLayout({
   children,
 }: {
