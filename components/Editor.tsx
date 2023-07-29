@@ -106,7 +106,6 @@ export const Editor = ({
                   const newEmoji = block.props.emoji.replace(emoji, "");
                   if (newEmoji.length === 0) {
                     console.log("textBlockId", block.props.textBlockId);
-                    console.log("editor", editor);
                     editorRef.current?.updateBlock(block.props.textBlockId, {
                       props: { backgroundColor: "transparent" },
                     });
