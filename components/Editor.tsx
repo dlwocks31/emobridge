@@ -24,6 +24,9 @@ export type MyBlockSchema = BlockSchema & {
       emoji: {
         default: "👍";
       };
+      textBlockId: {
+        default: "";
+      };
       backgroundColor: {
         default: "transparent";
       };
@@ -64,7 +67,7 @@ export const Editor = ({
       "blocknote-dev.yousefed.partykit.dev",
       // use a unique name as a "room" for your application:
       "jaechan-lee-project",
-      doc,
+      doc
     );
     return [doc, provider];
   }, []);
@@ -75,6 +78,9 @@ export const Editor = ({
       ...defaultProps,
       emoji: {
         default: "👍" as const,
+      },
+      textBlockId: {
+        default: "" as const,
       },
     },
     containsInlineContent: false,
@@ -99,6 +105,11 @@ export const Editor = ({
                   console.log("removeBlocks", block.id, emoji);
                   const newEmoji = block.props.emoji.replace(emoji, "");
                   if (newEmoji.length === 0) {
+                    console.log("textBlockId", block.props.textBlockId);
+                    console.log("editor", editor);
+                    editorRef.current?.updateBlock(block.props.textBlockId, {
+                      props: { backgroundColor: "transparent" },
+                    });
                     editorRef.current?.removeBlocks([block]);
                   } else {
                     editorRef.current?.updateBlock(block, {

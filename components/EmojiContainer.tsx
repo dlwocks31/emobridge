@@ -1,13 +1,9 @@
 import { BlockNoteEditor, Editor, PartialBlock } from "@/components/Editor";
 import { EmojiType } from "next/dist/compiled/@vercel/og/emoji";
-import { Emoji } from "./Emoji"
+import { Emoji } from "./Emoji";
 const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
 
-export const EmojiContainer = ({
-  editor,
-}: {
-  editor: BlockNoteEditor;
-}) => {
+export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
   const handleEmojiClick = (emoji: string) => {
     const textCursorPosition = editor.getTextCursorPosition();
     if (textCursorPosition.block.id) {
@@ -30,6 +26,11 @@ export const EmojiContainer = ({
             emoji: mergeString(prevBlock.props.emoji, emoji),
           },
         });
+        if (block) {
+          editor?.updateBlock(block, {
+            props: { backgroundColor: "gray" },
+          });
+        }
         return;
       } else if (block) {
         const blocksToInsert: PartialBlock[] = [
@@ -37,24 +38,30 @@ export const EmojiContainer = ({
             type: "emoji",
             props: {
               emoji,
+              textBlockId: block.id,
             },
           },
         ];
         editor?.insertBlocks(blocksToInsert, block.id);
+        editor?.updateBlock(block, {
+          props: { backgroundColor: "gray" },
+        });
       }
     }
   };
 
-  return <div className="">
-    {emojis.map((emoji, index) => (
-      <button
-        key={index}
-        onClick={() => handleEmojiClick(emoji)}
-        className="emoji-button mx-2 rounded-lg p-2 shadow-md"
-        style={{ fontSize: "1.5em" }}
-      >
-        {emoji}
-      </button>
-    ))}
-  </div>
-}
+  return (
+    <div className="">
+      {emojis.map((emoji, index) => (
+        <button
+          key={index}
+          onClick={() => handleEmojiClick(emoji)}
+          className="emoji-button mx-2 rounded-lg p-2 shadow-md"
+          style={{ fontSize: "1.5em" }}
+        >
+          {emoji}
+        </button>
+      ))}
+    </div>
+  );
+};
