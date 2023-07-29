@@ -79,8 +79,12 @@ export const Editor = ({
     },
     containsInlineContent: false,
     render: ({ block }) => {
-      const getLeftClass = (emojiLength: number) =>
-        `-left-${16 + emojiLength * 8}`;
+      const getLeftClass = (emojiLength: number) => {
+        if (emojiLength === 1) return "-left-24";
+        if (emojiLength === 2) return "-left-32";
+        if (emojiLength === 3) return "-left-40";
+        return "";
+      };
       return (
         <div className="absolute">
           <div
@@ -88,13 +92,26 @@ export const Editor = ({
               "relative top-1 flex " +
               getLeftClass(Array.from(block.props.emoji).length)
             }
-            onClick={() => {
-              console.log("removeBlocks", block.id);
-              editorRef.current?.removeBlocks([block]);
-            }}
           >
             {Array.from(block.props.emoji).map((emoji: string) => (
-              <Emoji emoji={emoji} />
+              <div
+                onClick={() => {
+                  console.log("removeBlocks", block.id, emoji);
+                  const newEmoji = block.props.emoji.replace(emoji, "");
+                  if (newEmoji.length === 0) {
+                    editorRef.current?.removeBlocks([block]);
+                  } else {
+                    editorRef.current?.updateBlock(block, {
+                      type: "emoji",
+                      props: {
+                        emoji: newEmoji,
+                      },
+                    });
+                  }
+                }}
+              >
+                <Emoji emoji={emoji} />
+              </div>
             ))}
           </div>
         </div>
