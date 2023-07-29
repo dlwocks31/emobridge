@@ -51,6 +51,7 @@ export const Editor = ({
   onEditorReady,
   onTextCursorPositionChange,
   editable,
+  userName,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
@@ -60,6 +61,7 @@ export const Editor = ({
     prevBlockId: string | null;
   }) => void;
   editable: boolean;
+  userName?: string;
 }) => {
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
@@ -67,7 +69,7 @@ export const Editor = ({
       "blocknote-dev.yousefed.partykit.dev",
       // use a unique name as a "room" for your application:
       "jaechan-lee-project",
-      doc
+      doc,
     );
     return [doc, provider];
   }, []);
@@ -107,7 +109,7 @@ export const Editor = ({
                   if (newEmoji.length === 0) {
                     console.log("textBlockId", block.props.textBlockId);
                     const textBlock = editorRef.current?.getBlock(
-                      block.props.textBlockId
+                      block.props.textBlockId,
                     );
                     if (textBlock) {
                       editorRef.current?.updateBlock(block.props.textBlockId, {
@@ -145,7 +147,7 @@ export const Editor = ({
       fragment: doc.getXmlFragment("document-store"),
       // Information (name and color) for this user:
       user: {
-        name: "My Username",
+        name: userName ?? "Anonymous",
         color: "#ff0000",
       },
     },
