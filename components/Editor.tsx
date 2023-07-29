@@ -78,21 +78,28 @@ export const Editor = ({
       },
     },
     containsInlineContent: false,
-    render: ({ block }) => (
-      <div className="absolute">
-        <div
-          className="relative -left-40 -top-3 flex"
-          onClick={() => {
-            console.log("removeBlocks", block.id);
-            editorRef.current?.removeBlocks([block]);
-          }}
-        >
-          {Array.from(block.props.emoji).map((emoji: string) => (
-            <Emoji emoji={emoji} />
-          ))}
+    render: ({ block }) => {
+      const getLeftClass = (emojiLength: number) =>
+        `-left-${16 + emojiLength * 8}`;
+      return (
+        <div className="absolute">
+          <div
+            className={
+              "relative top-1 flex " +
+              getLeftClass(Array.from(block.props.emoji).length)
+            }
+            onClick={() => {
+              console.log("removeBlocks", block.id);
+              editorRef.current?.removeBlocks([block]);
+            }}
+          >
+            {Array.from(block.props.emoji).map((emoji: string) => (
+              <Emoji emoji={emoji} />
+            ))}
+          </div>
         </div>
-      </div>
-    ),
+      );
+    },
   });
 
   const editorRef = useRef<BlockNoteEditor | null>(null);
