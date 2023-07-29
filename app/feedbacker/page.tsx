@@ -1,5 +1,6 @@
 "use client";
 import { BlockNoteEditor, Editor, PartialBlock } from "@/components/Editor";
+import { EmojiContainer } from "@/components/EmojiContainer";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
@@ -23,41 +24,7 @@ export default function Feedbacker() {
     setEditor(editor);
   };
 
-  const handleEmojiClick = (emoji: string) => {
-    if (textCursorPosition.blockId) {
-      const block = editor?.getBlock(textCursorPosition.blockId);
-      const prevBlock = textCursorPosition?.prevBlockId
-        ? editor?.getBlock(textCursorPosition.prevBlockId)
-        : null;
 
-      if (prevBlock?.type === "emoji") {
-        const mergeString = (initial: string, next: string) => {
-          const initialLength = Array.from(initial).length;
-          if (initial.includes(next) || initialLength >= 3) {
-            return initial;
-          }
-          return initial + next;
-        };
-        editor?.updateBlock(prevBlock, {
-          type: "emoji",
-          props: {
-            emoji: mergeString(prevBlock.props.emoji, emoji),
-          },
-        });
-        return;
-      } else if (block) {
-        const blocksToInsert: PartialBlock[] = [
-          {
-            type: "emoji",
-            props: {
-              emoji,
-            },
-          },
-        ];
-        editor?.insertBlocks(blocksToInsert, block.id);
-      }
-    }
-  };
 
   const [editable, setEditable] = useState(false);
 
@@ -65,16 +32,11 @@ export default function Feedbacker() {
     <>
       <div className="w-full">
         <div className="flex justify-center">
-          {emojis.map((emoji, index) => (
-            <button
-              key={index}
-              onClick={() => handleEmojiClick(emoji)}
-              className="emoji-button mx-2 rounded-lg p-2 shadow-md"
-              style={{ fontSize: "1.5em" }}
-            >
-              {emoji}
-            </button>
-          ))}
+          {editor ?
+            <EmojiContainer
+              editor={editor}
+            /> : null
+          }
         </div>
         <div className="flex justify-center items-center mt-2">
           <input
