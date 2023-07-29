@@ -92,10 +92,10 @@ export const Editor = ({
         return "";
       };
       return (
-        <div className="absolute">
+        <div className="relative">
           <div
             className={
-              "relative top-1 flex " +
+              "absolute top-1 flex " +
               getLeftClass(Array.from(block.props.emoji).length)
             }
           >
