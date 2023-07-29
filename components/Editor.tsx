@@ -46,11 +46,16 @@ type Block = BlockOriginal<MyBlockSchema>;
 // Our <Editor> component that we can now use
 export const Editor = ({
   onEditorReady,
-  setTextCursorBlockId,
+  onTextCursorPositionChange,
   editable,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
+  onTextCursorPositionChange?: (textCursorPosition: {
+    blockId: string;
+    nextBlockId: string | null;
+    prevBlockId: string | null;
+  }) => void;
   editable: boolean;
 }) => {
   const [doc, provider] = useMemo(() => {
@@ -76,13 +81,15 @@ export const Editor = ({
     render: ({ block }) => (
       <div className="absolute">
         <div
-          className="relative -left-24 -top-3"
+          className="relative -left-40 -top-3 flex"
           onClick={() => {
             console.log("removeBlocks", block.id);
             editorRef.current?.removeBlocks([block]);
           }}
         >
-          <Emoji emoji={block.props.emoji} />
+          {Array.from(block.props.emoji).map((emoji: string) => (
+            <Emoji emoji={emoji} />
+          ))}
         </div>
       </div>
     ),
@@ -109,12 +116,13 @@ export const Editor = ({
       emoji: EmojiBlock,
     },
     onTextCursorPositionChange: (editor: BlockNoteEditor) => {
-      const hoveredBlock: Block = editor.getTextCursorPosition().block;
-      console.log("textCursorPosition", editor.getTextCursorPosition());
-      if (setTextCursorBlockId) {
-        setTextCursorBlockId(hoveredBlock.id);
-      }
-      console.log("onTextCursorPositionChange", hoveredBlock);
+      const textCursorPosition = editor.getTextCursorPosition();
+      console.log("textCursorPosition", textCursorPosition);
+      onTextCursorPositionChange?.({
+        blockId: textCursorPosition.block.id,
+        nextBlockId: textCursorPosition.nextBlock?.id ?? null,
+        prevBlockId: textCursorPosition.prevBlock?.id ?? null,
+      });
     },
   });
 

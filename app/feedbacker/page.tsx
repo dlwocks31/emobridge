@@ -1,18 +1,20 @@
 "use client";
 import { BlockNoteEditor, Editor, PartialBlock } from "@/components/Editor";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { RealtimeChannel } from "@supabase/supabase-js";
 import { useState } from "react";
-const emojis = ["👍", "🤔", "🌟"]; // Your emoji list
+const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
 
 export default function Feedbacker() {
   const supabase = createClientComponentClient();
-  const [channel] = useState<RealtimeChannel>(() =>
-    supabase.channel("realtime:test"),
-  );
-  const [textCursorBlockId, setTextCursorBlockId] = useState<string | null>(
-    null,
-  );
+  const [textCursorPosition, setTextCursorPosition] = useState<{
+    blockId: string | null;
+    nextBlockId: string | null;
+    prevBlockId: string | null;
+  }>({
+    blockId: null,
+    nextBlockId: null,
+    prevBlockId: null,
+  });
 
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
@@ -22,19 +24,28 @@ export default function Feedbacker() {
   };
 
   const handleEmojiClick = (emoji: string) => {
-    channel
-      .send({
-        type: "broadcast",
-        event: "emoji",
-        payload: {
-          emoji,
-        },
-      })
-      .catch(console.error);
-    console.log(`You clicked on ${emoji}`);
-    if (textCursorBlockId) {
-      const block = editor?.getBlock(textCursorBlockId);
-      if (block) {
+    if (textCursorPosition.blockId) {
+      const block = editor?.getBlock(textCursorPosition.blockId);
+      const prevBlock = textCursorPosition?.prevBlockId
+        ? editor?.getBlock(textCursorPosition.prevBlockId)
+        : null;
+
+      if (prevBlock?.type === "emoji") {
+        const mergeString = (initial: string, next: string) => {
+          const initialLength = Array.from(initial).length;
+          if (initial.includes(next) || initialLength >= 3) {
+            return initial;
+          }
+          return initial + next;
+        };
+        editor?.updateBlock(prevBlock, {
+          type: "emoji",
+          props: {
+            emoji: mergeString(prevBlock.props.emoji, emoji),
+          },
+        });
+        return;
+      } else if (block) {
         const blocksToInsert: PartialBlock[] = [
           {
             type: "emoji",
@@ -43,7 +54,7 @@ export default function Feedbacker() {
             },
           },
         ];
-        editor?.insertBlocks(blocksToInsert, textCursorBlockId);
+        editor?.insertBlocks(blocksToInsert, block.id);
       }
     }
   };
@@ -75,11 +86,11 @@ export default function Feedbacker() {
           />
           <label htmlFor="checkbox">편집 활성화</label>
         </div>
-        <div className="p-12">
+        <div className="p-28">
           <Editor
             editable={editable}
             onEditorReady={handleEditorReady}
-            setTextCursorBlockId={setTextCursorBlockId}
+            onTextCursorPositionChange={setTextCursorPosition}
           />
         </div>
       </div>
