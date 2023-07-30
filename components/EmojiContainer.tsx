@@ -1,6 +1,4 @@
-import { BlockNoteEditor, Editor, PartialBlock } from "@/components/Editor";
-import { EmojiType } from "next/dist/compiled/@vercel/og/emoji";
-import { Emoji } from "./Emoji";
+import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
 
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
