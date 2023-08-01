@@ -14,16 +14,12 @@ export default async function Notetaker({
   } = await supabase.auth.getUser();
 
   return (
-    <>
-      <div className="w-full">
-        <div className="p-12">
-          <Editor
-            editable={true}
-            userName={user?.user_metadata?.full_name}
-            docId={searchParams?.docId as string}
-          />
-        </div>
-      </div>
-    </>
+    <div className="w-full px-28 py-8 flex-grow">
+      <Editor
+        editable={true}
+        userName={user?.user_metadata?.full_name}
+        docId={searchParams?.docId as string}
+      />
+    </div>
   );
 }

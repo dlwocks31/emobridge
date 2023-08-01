@@ -22,30 +22,28 @@ export function Feedbacker({
   const [editable, setEditable] = useState(false);
 
   return (
-    <>
-      <div className="w-full">
-        <div className="flex justify-center">
-          {editor ? <EmojiContainer editor={editor} /> : null}
-        </div>
-        <div className="flex justify-center items-center mt-2">
-          <input
-            type="checkbox"
-            id="checkbox"
-            checked={editable}
-            onChange={() => setEditable(!editable)}
-            className="h-5 w-5 mr-2"
-          />
-          <label htmlFor="checkbox">편집 활성화</label>
-        </div>
-        <div className="p-28">
-          <Editor
-            editable={editable}
-            onEditorReady={handleEditorReady}
-            userName={user?.user_metadata?.full_name}
-            docId={docId}
-          />
-        </div>
+    <div className="w-full flex-grow">
+      <div className="flex justify-center">
+        {editor ? <EmojiContainer editor={editor} /> : null}
       </div>
-    </>
+      <div className="flex justify-center items-center mt-2">
+        <input
+          type="checkbox"
+          id="checkbox"
+          checked={editable}
+          onChange={() => setEditable(!editable)}
+          className="h-5 w-5 mr-2"
+        />
+        <label htmlFor="checkbox">편집 활성화</label>
+      </div>
+      <div className="px-28 py-4">
+        <Editor
+          editable={editable}
+          onEditorReady={handleEditorReady}
+          userName={user?.user_metadata?.full_name}
+          docId={docId}
+        />
+      </div>
+    </div>
   );
 }
