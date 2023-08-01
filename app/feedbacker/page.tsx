@@ -2,7 +2,11 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { Feedbacker } from "./Feedbacker";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -11,7 +15,7 @@ export default async function Page() {
 
   return (
     <>
-      <Feedbacker user={user} />
+      <Feedbacker user={user} docId={searchParams?.docId as string} />
     </>
   );
 }

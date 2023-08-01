@@ -52,6 +52,7 @@ export const Editor = ({
   onTextCursorPositionChange,
   editable,
   userName,
+  docId,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
@@ -62,13 +63,14 @@ export const Editor = ({
   }) => void;
   editable: boolean;
   userName?: string;
+  docId?: string;
 }) => {
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
     const provider = new YPartyKitProvider(
       "blocknote-dev.yousefed.partykit.dev",
       // use a unique name as a "room" for your application:
-      "jaechan-lee-project",
+      docId ? `jaechan-lee-project-${docId}` : "jaechan-lee-project",
       doc,
     );
     return [doc, provider];

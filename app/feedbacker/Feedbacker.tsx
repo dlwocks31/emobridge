@@ -4,7 +4,13 @@ import { EmojiContainer } from "@/components/EmojiContainer";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 
-export function Feedbacker({ user }: { user: User | null }) {
+export function Feedbacker({
+  user,
+  docId,
+}: {
+  user: User | null;
+  docId?: string;
+}) {
   console.log("user", user);
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
@@ -36,6 +42,7 @@ export function Feedbacker({ user }: { user: User | null }) {
             editable={editable}
             onEditorReady={handleEditorReady}
             userName={user?.user_metadata?.full_name}
+            docId={docId}
           />
         </div>
       </div>
