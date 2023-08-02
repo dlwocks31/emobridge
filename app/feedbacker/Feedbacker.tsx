@@ -22,7 +22,7 @@ export function Feedbacker({
   const [editable, setEditable] = useState(false);
 
   return (
-    <div className="w-full flex-grow">
+    <div className="w-full flex-grow flex flex-col">
       <div className="flex justify-center">
         {editor ? <EmojiContainer editor={editor} /> : null}
       </div>
@@ -36,7 +36,7 @@ export function Feedbacker({
         />
         <label htmlFor="checkbox">편집 활성화</label>
       </div>
-      <div className="px-28 py-4">
+      <div className="px-28 py-4 flex-grow flex flex-col">
         <Editor
           editable={editable}
           onEditorReady={handleEditorReady}

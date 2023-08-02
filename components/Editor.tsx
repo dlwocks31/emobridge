@@ -188,8 +188,17 @@ export const Editor = ({
 
   // Renders the editor instance using a React component.
   return editor ? (
-    <div className="border-2">
+    <div className="border-2 flex-grow flex flex-col">
       <BlockNoteView editor={editor} />
+      <div
+        className="flex-grow"
+        onClick={() => {
+          const editable = document.querySelector<HTMLElement>(
+            "[contenteditable=true]",
+          );
+          editable?.focus();
+        }}
+      ></div>
     </div>
   ) : (
     <div className="text-center">에디터 로딩중..</div>
