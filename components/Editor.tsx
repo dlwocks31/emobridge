@@ -105,6 +105,7 @@ export const Editor = ({
           >
             {Array.from(block.props.emoji).map((emoji: string) => (
               <div
+                key={emoji}
                 onClick={() => {
                   console.log("removeBlocks", block.id, emoji);
                   const newEmoji = block.props.emoji.replace(emoji, "");
