@@ -189,7 +189,7 @@ export const Editor = ({
   // Renders the editor instance using a React component.
   return editor ? (
     <div className="border-2">
-      {editor ? <BlockNoteView editor={editor} /> : <div>Loading...</div>}
+      <BlockNoteView editor={editor} />
     </div>
   ) : (
     <div className="text-center">에디터 로딩중..</div>
