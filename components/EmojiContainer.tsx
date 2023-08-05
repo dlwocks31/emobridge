@@ -1,3 +1,6 @@
+"use client";
+import { useContext } from "react";
+import { GlobalContext } from "../app/providers"
 import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 import Image from "next/image";
 // const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
@@ -34,6 +37,7 @@ const RowInfo = [
 ];
 
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
+  const { emojiContainerOpened, setEmojiContainerOpened } = useContext(GlobalContext);
   const handleEmojiClick = (emoji: string) => {
     const textCursorPosition = editor.getTextCursorPosition();
     if (textCursorPosition.block.id) {
@@ -82,6 +86,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
   return (
     <div className="">
+      {emojiContainerOpened ? 
       <div className="w-80 h-100 bg-gray-100">
         <div>필기 이모지</div>
         {RowInfo.map((row, index) => (
@@ -101,6 +106,8 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
           </div>
         ))}
       </div>
+      : null}
+      
     </div>
   );
 };
