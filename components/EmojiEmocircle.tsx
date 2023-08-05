@@ -1,9 +1,12 @@
-import { Emoji } from "./Emoji";
 import Image from "next/image";
-import { useState, useRef } from "react";
-import { set } from "ts-pattern/dist/patterns";
+import { useRef, useState } from "react";
 
-const emojiList = [
+interface Emoji {
+  url: string;
+  def: string;
+}
+
+const emojiList: Emoji[] = [
   {
     url: "/bad.png",
     def: "별로야",
@@ -56,6 +59,13 @@ export const EmojiEmoCircle = () => {
   const currentEmojiRef = useRef(currentEmoji);
   currentEmojiRef.current = currentEmoji;
 
+  const handleEmojiClick = (emoji: Emoji) => {
+    setCurrentEmoji(emoji.url);
+    setTimeout(() => {
+      if (emoji.url === currentEmojiRef.current) setCurrentEmoji(null);
+    }, 2000);
+    setShowContainer(false);
+  };
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
@@ -70,17 +80,7 @@ export const EmojiEmoCircle = () => {
                     alt={emoji.def}
                     width="64"
                     height="64"
-                    onClick={() => {
-                      setCurrentEmoji(emoji.url);
-                      setTimeout(() => {
-                        console.log(
-                          `currentEmoji: ${currentEmojiRef.current}, emoji.url: ${emoji.url}`
-                        );
-                        if (emoji.url === currentEmojiRef.current)
-                          setCurrentEmoji(null);
-                      }, 2000);
-                      setShowContainer(false);
-                    }}
+                    onClick={() => handleEmojiClick(emoji)}
                   />
                   <div className="text-center"> {emoji.def} </div>
                 </figure>
