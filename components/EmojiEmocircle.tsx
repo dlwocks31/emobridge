@@ -103,6 +103,10 @@ export const EmojiEmoCircle = () => {
         handleEmojiClick(payload.payload.emoji, { isLocal: false });
       })
       .subscribe();
+
+    return () => {
+      channel.unsubscribe();
+    };
   }, []);
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
