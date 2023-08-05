@@ -24,7 +24,7 @@ export function Feedbacker({
 
   return (
     <div className="w-full flex-grow flex flex-col">
-      <div className="w-full flex justify-end fixed z-50 pr-28">
+      <div className="w-full flex justify-end ">
         {editor ? <EmojiContainer editor={editor} /> : null}
       </div>
       <div className="flex justify-center items-center mt-2">
