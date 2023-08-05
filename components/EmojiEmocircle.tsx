@@ -1,6 +1,7 @@
 import { Emoji } from "./Emoji";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { set } from "ts-pattern/dist/patterns";
 
 const emojiList = [
   {
@@ -43,6 +44,8 @@ const RowInfo = [
 export const EmojiEmoCircle = () => {
   const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
+  const currentEmojiRef = useRef(currentEmoji);
+  currentEmojiRef.current = currentEmoji;
 
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
@@ -57,7 +60,17 @@ export const EmojiEmoCircle = () => {
                   alt="me"
                   width="64"
                   height="64"
-                  onClick={() => setCurrentEmoji(emoji.url)}
+                  onClick={() => {
+                    setCurrentEmoji(emoji.url);
+                    setTimeout(() => {
+                      console.log(
+                        `currentEmoji: ${currentEmojiRef.current}, emoji.url: ${emoji.url}`
+                      );
+                      if (emoji.url === currentEmojiRef.current)
+                        setCurrentEmoji(null);
+                    }, 2000);
+                    setShowContainer(false);
+                  }}
                 />
               ))}
             </div>
