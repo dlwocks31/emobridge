@@ -6,40 +6,49 @@ import { set } from "ts-pattern/dist/patterns";
 const emojiList = [
   {
     url: "/bad.png",
+    def: "별로야",
   },
   {
     url: "/fighting.png",
+    def: "화이팅",
   },
   {
     url: "/funny.png",
+    def: "웃겨",
   },
   {
     url: "/good.png",
+    def: "재밌어",
   },
   {
     url: "/help.png",
+    def: "도와줘",
   },
   {
     url: "/hungry.png",
+    def: "배고파",
   },
   {
     url: "/nosleep.png",
+    def: "일어나",
   },
   {
     url: "/sleep.png",
+    def: "졸려",
   },
   {
     url: "/thanks.png",
+    def: "고마워",
   },
   {
     url: "/toilet.png",
+    def: "화장실",
   },
 ];
 const RowInfo = [
-  { start: 0, end: 3 },
-  { start: 3, end: 6 },
-  { start: 6, end: 9 },
-  { start: 9, end: 10 },
+  { start: 0, end: 4 },
+  { start: 4, end: 8 },
+  { start: 8, end: 10 },
 ];
 export const EmojiEmoCircle = () => {
   const [showContainer, setShowContainer] = useState(false);
@@ -55,23 +64,26 @@ export const EmojiEmoCircle = () => {
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <Image
-                  src={emoji.url}
-                  alt="me"
-                  width="64"
-                  height="64"
-                  onClick={() => {
-                    setCurrentEmoji(emoji.url);
-                    setTimeout(() => {
-                      console.log(
-                        `currentEmoji: ${currentEmojiRef.current}, emoji.url: ${emoji.url}`
-                      );
-                      if (emoji.url === currentEmojiRef.current)
-                        setCurrentEmoji(null);
-                    }, 2000);
-                    setShowContainer(false);
-                  }}
-                />
+                <figure>
+                  <Image
+                    src={emoji.url}
+                    alt={emoji.def}
+                    width="64"
+                    height="64"
+                    onClick={() => {
+                      setCurrentEmoji(emoji.url);
+                      setTimeout(() => {
+                        console.log(
+                          `currentEmoji: ${currentEmojiRef.current}, emoji.url: ${emoji.url}`
+                        );
+                        if (emoji.url === currentEmojiRef.current)
+                          setCurrentEmoji(null);
+                      }, 2000);
+                      setShowContainer(false);
+                    }}
+                  />
+                  <div className="text-center"> {emoji.def} </div>
+                </figure>
               ))}
             </div>
           ))}
