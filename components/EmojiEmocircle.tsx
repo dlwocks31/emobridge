@@ -63,11 +63,12 @@ export const EmojiEmoCircle = () => {
           self: false,
         },
       },
-    })
+    }),
   );
   const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
   const [currentEmojiAlt, setCurrentEmojiAlt] = useState<string>("");
+  const [isEmojiVisible, setIsEmojiVisible] = useState(false);
   const currentEmojiRef = useRef(currentEmoji);
   const currentEmojiAltRef = useRef(currentEmojiAlt);
   currentEmojiRef.current = currentEmoji;
@@ -146,7 +147,11 @@ export const EmojiEmoCircle = () => {
         onMouseLeave={() => setShowCircle(false)}
       >
         {currentEmoji && (
-          <div className="h-full w-full relative">
+          <div
+            className={`h-full w-full relative transition-opacity ${
+              isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
+            }`}
+          >
             <Image
               src={currentEmoji}
               alt={currentEmojiAlt}
