@@ -44,11 +44,11 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
       if (prevBlock?.type === "emoji") {
         const mergeString = (initial: string, next: string) => {
-          const initialLength = Array.from(initial).length;
+          const initialLength = initial.split(',').length;
           if (initial.includes(next) || initialLength >= 3) {
             return initial;
           }
-          return initial + next;
+          return initial + ',' + next;
         };
         editor?.updateBlock(prevBlock, {
           type: "emoji",
