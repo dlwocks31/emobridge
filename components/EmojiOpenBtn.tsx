@@ -13,7 +13,11 @@ export const EmojiOpenBtn = () => {
   }
   return (
     <div onClick={onClickEmojiOpen}>
-      Emoji
+      <img src='/smile.png'
+      alt="smile"
+      width="24"
+      height="24"
+      ></img>
     </div>
   );
 };
