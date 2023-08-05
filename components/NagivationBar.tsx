@@ -30,7 +30,8 @@ export async function NavigationBar() {
         <div className="block">
           <ul className="flex">
             <li className="mr-6">
-              <LinkWithRoute href="/feedbacker" text="emoji" />
+              {/* <LinkWithRoute href="/feedbacker" text="emoji" /> */}
+              <EmojiOpenBtn/>
             </li>
             {/* <li className="mr-6">
               <LinkWithRoute href="/feedbacker" text="장애학생 페이지" />

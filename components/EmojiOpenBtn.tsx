@@ -13,7 +13,7 @@ export const EmojiOpenBtn = () => {
   }
   return (
     <div onClick={onClickEmojiOpen}>
-      이모지
+      Emoji
     </div>
   );
 };
