@@ -63,12 +63,13 @@ export const EmojiEmoCircle = () => {
           self: false,
         },
       },
-    }),
+    })
   );
   const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
   const currentEmojiRef = useRef(currentEmoji);
   currentEmojiRef.current = currentEmoji;
+  const [showCircle, setShowCircle] = useState(false);
 
   const handleEmojiClick = (emoji: Emoji, option: { isLocal: boolean }) => {
     console.log("handleEmojiClick running:", emoji);
@@ -97,7 +98,11 @@ export const EmojiEmoCircle = () => {
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
-        <div className="bg-gray-100 rounded-lg shadow-xl m-2 ring-2 ring-gray-200">
+        <div
+          className="bg-gray-100 rounded-lg shadow-xl m-2 ring-2 ring-gray-200"
+          onMouseOver={() => setShowCircle(true)}
+          onMouseLeave={() => setShowCircle(false)}
+        >
           <div className="text-center text-xl">필기 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
@@ -121,8 +126,17 @@ export const EmojiEmoCircle = () => {
         </div>
       )}
       <div
-        className="flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-black border-opacity-10 shadow-xl ring-2 ring-gray-200"
-        onClick={() => setShowContainer(!showContainer)}
+        className={
+          "flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
+          (showCircle
+            ? " ring-2 ring-gray-200 shadow-xl"
+            : " bg-opacity-40 border-opacity-20")
+        }
+        onClick={() => {
+          setShowContainer(!showContainer), setShowCircle(true);
+        }}
+        onMouseOver={() => setShowCircle(true)}
+        onMouseLeave={() => setShowCircle(false)}
       >
         {currentEmoji && (
           <div className="h-full w-full relative">
