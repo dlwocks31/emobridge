@@ -83,6 +83,7 @@ export const EmojiEmoCircle = () => {
     setTimeout(() => {
       if (emoji.url === currentEmojiRef.current) {
         setIsEmojiVisible(false);
+        setShowCircle(false);
       }
     }, 2000);
     setShowContainer(false);
@@ -138,7 +139,7 @@ export const EmojiEmoCircle = () => {
           "flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
           (showCircle
             ? " ring-2 ring-gray-200 shadow-xl"
-            : " bg-opacity-40 border-opacity-20")
+            : " transition-opacity duration-200 bg-opacity-40 border-opacity-20")
         }
         onClick={() => {
           setShowContainer(!showContainer), setShowCircle(true);
