@@ -67,15 +67,22 @@ export const EmojiEmoCircle = () => {
   );
   const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
+  const [currentEmojiAlt, setCurrentEmojiAlt] = useState<string>("");
   const currentEmojiRef = useRef(currentEmoji);
+  const currentEmojiAltRef = useRef(currentEmojiAlt);
   currentEmojiRef.current = currentEmoji;
+  currentEmojiAltRef.current = currentEmojiAlt;
   const [showCircle, setShowCircle] = useState(false);
 
   const handleEmojiClick = (emoji: Emoji, option: { isLocal: boolean }) => {
     console.log("handleEmojiClick running:", emoji);
     setCurrentEmoji(emoji.url);
+    setCurrentEmojiAlt(emoji.def);
     setTimeout(() => {
-      if (emoji.url === currentEmojiRef.current) setCurrentEmoji(null);
+      if (emoji.url === currentEmojiRef.current) {
+        setCurrentEmoji(null);
+        setCurrentEmojiAlt("");
+      }
     }, 2000);
     setShowContainer(false);
     if (option.isLocal) {
@@ -142,7 +149,7 @@ export const EmojiEmoCircle = () => {
           <div className="h-full w-full relative">
             <Image
               src={currentEmoji}
-              alt="me"
+              alt={currentEmojiAlt}
               layout="fill"
               objectFit="contain"
             />
