@@ -1,5 +1,6 @@
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Emoji {
   url: string;
@@ -54,18 +55,45 @@ const RowInfo = [
   { start: 8, end: 10 },
 ];
 export const EmojiEmoCircle = () => {
+  const supabase = createClientComponentClient();
+  const [channel] = useState(() =>
+    supabase.channel("emotion-emoji", {
+      config: {
+        broadcast: {
+          self: false,
+        },
+      },
+    }),
+  );
   const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
   const currentEmojiRef = useRef(currentEmoji);
   currentEmojiRef.current = currentEmoji;
 
-  const handleEmojiClick = (emoji: Emoji) => {
+  const handleEmojiClick = (emoji: Emoji, option: { isLocal: boolean }) => {
+    console.log("handleEmojiClick running:", emoji);
     setCurrentEmoji(emoji.url);
     setTimeout(() => {
       if (emoji.url === currentEmojiRef.current) setCurrentEmoji(null);
     }, 2000);
     setShowContainer(false);
+    if (option.isLocal) {
+      channel.send({
+        type: "broadcast",
+        event: "click",
+        payload: { emoji },
+      });
+    }
   };
+
+  useEffect(() => {
+    channel
+      .on("broadcast", { event: "click" }, (payload) => {
+        console.log("received broadcast:", payload);
+        handleEmojiClick(payload.payload.emoji, { isLocal: false });
+      })
+      .subscribe();
+  }, []);
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
@@ -80,7 +108,7 @@ export const EmojiEmoCircle = () => {
                     alt={emoji.def}
                     width="64"
                     height="64"
-                    onClick={() => handleEmojiClick(emoji)}
+                    onClick={() => handleEmojiClick(emoji, { isLocal: true })}
                   />
                   <div className="text-center text-base font-normal">
                     {" "}
