@@ -1,5 +1,37 @@
 import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
-const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
+import Image from "next/image";
+// const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
+const emojiList = [
+  {
+    url: "/important.png",
+  },
+  {
+    url: "/fix.png",
+  },
+  {
+    url: "/more.png",
+  },
+  {
+    url: "/ppt.png",
+  },
+  {
+    url: "/curious.png",
+  },
+  {
+    url: "/enough.png",
+  },
+  {
+    url: "/easy.png",
+  },
+  {
+    url: "/hard.png",
+  },
+];
+const RowInfo = [
+  { start: 0, end: 3 },
+  { start: 3, end: 6 },
+  { start: 6, end: 8 },
+];
 
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
   const handleEmojiClick = (emoji: string) => {
@@ -50,15 +82,21 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
   return (
     <div className="">
-      {emojis.map((emoji, index) => (
-        <button
-          key={index}
-          onClick={() => handleEmojiClick(emoji)}
-          className="emoji-button mx-2 rounded-lg p-2 shadow-md"
-          style={{ fontSize: "1.5em" }}
-        >
-          {emoji}
-        </button>
+      {RowInfo.map((row, index) => (
+        <div className="flex">
+          {emojiList.slice(row.start, row.end).map((emoji, index) => (
+            <Image
+              src={emoji.url}
+              alt="me"
+              width="64"
+              height="64"
+              onClick={() => {
+                console.log(emoji.url);
+                handleEmojiClick(emoji.url)
+              }}
+            />
+          ))}
+        </div>
       ))}
     </div>
   );

@@ -1,8 +1,10 @@
+
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { LinkWithRoute } from "./LinkWithRoute";
 import { UserInfo } from "./UserInfo";
 import { MuseoModerno } from "next/font/google"
+import { EmojiOpenBtn } from "./EmojiOpenBtn"
 
 const museoModerno = MuseoModerno({
   weight: '800',
@@ -11,6 +13,8 @@ const museoModerno = MuseoModerno({
 
 export async function NavigationBar() {
   const supabase = createServerComponentClient({ cookies });
+  
+  
 
   const {
     data: { user },
@@ -25,6 +29,9 @@ export async function NavigationBar() {
         </div>
         <div className="block">
           <ul className="flex">
+            <li className="mr-6">
+              <LinkWithRoute href="/feedbacker" text="emoji" />
+            </li>
             {/* <li className="mr-6">
               <LinkWithRoute href="/feedbacker" text="장애학생 페이지" />
             </li>

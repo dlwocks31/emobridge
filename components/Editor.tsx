@@ -22,7 +22,7 @@ export type MyBlockSchema = BlockSchema & {
   emoji: {
     propSchema: {
       emoji: {
-        default: "👍";
+        default: "/important.png";
       };
       textBlockId: {
         default: "";
@@ -81,7 +81,7 @@ export const Editor = ({
     propSchema: {
       ...defaultProps,
       emoji: {
-        default: "👍" as const,
+        default: "/important.png" as const,
       },
       textBlockId: {
         default: "" as const,
@@ -100,15 +100,15 @@ export const Editor = ({
           <div
             className={
               "absolute top-1 flex " +
-              getLeftClass(Array.from(block.props.emoji).length)
+              getLeftClass(block.props.emoji.split(',').length)
             }
           >
-            {Array.from(block.props.emoji).map((emoji: string) => (
+            {block.props.emoji.split(',').map((emoji: string) => (
               <div
                 key={emoji}
                 onClick={() => {
                   console.log("removeBlocks", block.id, emoji);
-                  const newEmoji = block.props.emoji.replace(emoji, "");
+                  const newEmoji = block.props.emoji.split(',').filter(e => e !== emoji).join(',');
                   if (newEmoji.length === 0) {
                     console.log("textBlockId", block.props.textBlockId);
                     const textBlock = editorRef.current?.getBlock(
