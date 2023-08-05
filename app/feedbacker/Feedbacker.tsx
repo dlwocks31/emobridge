@@ -46,7 +46,7 @@ export function Feedbacker({
         />
       </div>
       <div>
-        <EmojiEmoCircle />
+        <EmojiEmoCircle docId={docId} />
       </div>
     </div>
   );
