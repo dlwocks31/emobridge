@@ -79,10 +79,10 @@ export const EmojiEmoCircle = () => {
     console.log("handleEmojiClick running:", emoji);
     setCurrentEmoji(emoji.url);
     setCurrentEmojiAlt(emoji.def);
+    setIsEmojiVisible(true);
     setTimeout(() => {
       if (emoji.url === currentEmojiRef.current) {
-        setCurrentEmoji(null);
-        setCurrentEmojiAlt("");
+        setIsEmojiVisible(false);
       }
     }, 2000);
     setShowContainer(false);
