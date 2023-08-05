@@ -1,6 +1,7 @@
 "use client";
 import { BlockNoteEditor, Editor } from "@/components/Editor";
 import { EmojiContainer } from "@/components/EmojiContainer";
+import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { User } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 
@@ -43,6 +44,9 @@ export function Feedbacker({
           userName={user?.user_metadata?.full_name}
           docId={docId}
         />
+      </div>
+      <div>
+        <EmojiEmoCircle />
       </div>
     </div>
   );
