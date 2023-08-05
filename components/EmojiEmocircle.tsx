@@ -154,6 +154,7 @@ export const EmojiEmoCircle = () => {
             }`}
           >
             <Image
+              key={currentEmoji}
               src={currentEmoji}
               alt={currentEmojiAlt}
               layout="fill"
