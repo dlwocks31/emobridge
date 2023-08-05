@@ -1,8 +1,8 @@
 "use client";
-import { useContext } from "react";
-import { GlobalContext } from "../app/providers"
 import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 import Image from "next/image";
+import { useContext } from "react";
+import { GlobalContext } from "../app/providers";
 // const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
 const emojiList = [
   {
@@ -63,7 +63,8 @@ const RowInfo = [
 ];
 
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
-  const { emojiContainerOpened, setEmojiContainerOpened } = useContext(GlobalContext);
+  const { emojiContainerOpened, setEmojiContainerOpened } =
+    useContext(GlobalContext);
   const handleEmojiClick = (emoji: string) => {
     const textCursorPosition = editor.getTextCursorPosition();
     if (textCursorPosition.block.id) {
@@ -74,11 +75,11 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
       if (prevBlock?.type === "emoji") {
         const mergeString = (initial: string, next: string) => {
-          const initialLength = initial.split(',').length;
+          const initialLength = initial.split(",").length;
           if (initial.includes(next) || initialLength >= 3) {
             return initial;
           }
-          return initial + ',' + next;
+          return initial + "," + next;
         };
         editor?.updateBlock(prevBlock, {
           type: "emoji",
@@ -112,13 +113,13 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
   return (
     <div className="fixed z-50 pr-28">
-      {emojiContainerOpened ?
+      {emojiContainerOpened ? (
         <div className="h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur">
           <div>필기 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <div className="flex flex-col justify-center items-center w-16 m-1">
+                <div className="flex flex-col justify-start items-center w-16 m-1">
                   <Image
                     src={emoji.url}
                     alt="me"
@@ -126,17 +127,18 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
                     height="50"
                     onClick={() => {
                       console.log(emoji.url);
-                      handleEmojiClick(emoji.url)
+                      handleEmojiClick(emoji.url);
                     }}
                   />
-                  <div className="text-xs w-20 text-center whitespace-pre-wrap">{titleList[row.start + index].title}</div>
+                  <div className="text-xs w-20 text-center whitespace-pre-wrap mt-1">
+                    {titleList[row.start + index].title}
+                  </div>
                 </div>
               ))}
             </div>
           ))}
         </div>
-        : null}
-
+      ) : null}
     </div>
   );
 };
