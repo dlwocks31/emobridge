@@ -112,7 +112,7 @@ export const EmojiEmoCircle = () => {
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
-          <div className="text-center text-xl">필기 이모지</div>
+          <div className="text-center text-xl">감정 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
