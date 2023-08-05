@@ -25,7 +25,7 @@ export async function NavigationBar() {
         </div>
         <div className="block">
           <ul className="flex">
-            <li className="mr-6">
+            {/* <li className="mr-6">
               <LinkWithRoute href="/feedbacker" text="장애학생 페이지" />
             </li>
             <li className="mr-6">
@@ -37,7 +37,7 @@ export async function NavigationBar() {
               ) : (
                 <LinkWithRoute href="/auth/login" text="로그인" />
               )}
-            </li>
+            </li> */}
           </ul>
         </div>
       </nav>
