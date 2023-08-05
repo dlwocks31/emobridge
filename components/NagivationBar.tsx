@@ -2,6 +2,12 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { LinkWithRoute } from "./LinkWithRoute";
 import { UserInfo } from "./UserInfo";
+import { MuseoModerno } from "next/font/google"
+
+const museoModerno = MuseoModerno({
+  weight: '800',
+  subsets: ['latin']
+})
 
 export async function NavigationBar() {
   const supabase = createServerComponentClient({ cookies });
@@ -13,9 +19,9 @@ export async function NavigationBar() {
   console.log(user);
   return (
     <>
-      <nav className="flex items-center justify-between p-4 bg-blue-500  text-white">
+      <nav className="flex items-center justify-between p-4 bg-yellow-400 text-black fixed z-40 w-full px-28 h-16">
         <div className="flex items-center mr-6">
-          <span className="font-semibold text-xl">Emobridge</span>
+          <span className={"font-semibold text-xl " + museoModerno.className}>Emobridge</span>
         </div>
         <div className="block">
           <ul className="flex">
