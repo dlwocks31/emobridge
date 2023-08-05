@@ -8,40 +8,40 @@ interface Emoji {
 
 const emojiList: Emoji[] = [
   {
+    url: "/good.png",
+    def: "좋아",
+  },
+  {
     url: "/bad.png",
     def: "별로야",
-  },
-  {
-    url: "/fighting.png",
-    def: "화이팅",
-  },
-  {
-    url: "/funny.png",
-    def: "웃겨",
-  },
-  {
-    url: "/good.png",
-    def: "재밌어",
   },
   {
     url: "/help.png",
     def: "도와줘",
   },
   {
-    url: "/hungry.png",
-    def: "배고파",
-  },
-  {
-    url: "/nosleep.png",
-    def: "일어나",
+    url: "/fighting.png",
+    def: "화이팅",
   },
   {
     url: "/sleep.png",
     def: "졸려",
   },
   {
+    url: "/nosleep.png",
+    def: "일어나",
+  },
+  {
     url: "/thanks.png",
     def: "고마워",
+  },
+  {
+    url: "/funny.png",
+    def: "웃겨",
+  },
+  {
+    url: "/hungry.png",
+    def: "배고파",
   },
   {
     url: "/toilet.png",
@@ -69,8 +69,8 @@ export const EmojiEmoCircle = () => {
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
-        <div className="bg-gray-100 rounded-md shadow-xl m-2">
-          <div>필기 이모지</div>
+        <div className="bg-gray-100 rounded-lg shadow-xl m-2 ring-2 ring-gray-200">
+          <div className="text-center text-xl">필기 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
@@ -82,7 +82,10 @@ export const EmojiEmoCircle = () => {
                     height="64"
                     onClick={() => handleEmojiClick(emoji)}
                   />
-                  <div className="text-center"> {emoji.def} </div>
+                  <div className="text-center text-base font-normal">
+                    {" "}
+                    {emoji.def}{" "}
+                  </div>
                 </figure>
               ))}
             </div>
@@ -90,7 +93,7 @@ export const EmojiEmoCircle = () => {
         </div>
       )}
       <div
-        className="flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-black border-opacity-10 shadow-xl"
+        className="flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-black border-opacity-10 shadow-xl ring-2 ring-gray-200"
         onClick={() => setShowContainer(!showContainer)}
       >
         {currentEmoji && (
