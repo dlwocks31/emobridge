@@ -86,28 +86,28 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
 
   return (
     <div className="">
-      {emojiContainerOpened ? 
-      <div className="w-80 h-100 bg-gray-100">
-        <div>필기 이모지</div>
-        {RowInfo.map((row, index) => (
-          <div className="flex">
-            {emojiList.slice(row.start, row.end).map((emoji, index) => (
-              <Image
-                src={emoji.url}
-                alt="me"
-                width="50"
-                height="50"
-                onClick={() => {
-                  console.log(emoji.url);
-                  handleEmojiClick(emoji.url)
-                }}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
-      : null}
-      
+      {emojiContainerOpened ?
+        <div className="w-40 h-100 bg-gray-100">
+          <div>필기 이모지</div>
+          {RowInfo.map((row, index) => (
+            <div className="flex">
+              {emojiList.slice(row.start, row.end).map((emoji, index) => (
+                <Image
+                  src={emoji.url}
+                  alt="me"
+                  width="50"
+                  height="50"
+                  onClick={() => {
+                    console.log(emoji.url);
+                    handleEmojiClick(emoji.url)
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+        : null}
+
     </div>
   );
 };
