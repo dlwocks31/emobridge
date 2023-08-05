@@ -42,6 +42,7 @@ const RowInfo = [
 ];
 export const EmojiEmoCircle = () => {
   const [showContainer, setShowContainer] = useState(false);
+  const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
 
   return (
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
@@ -51,7 +52,13 @@ export const EmojiEmoCircle = () => {
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <Image src={emoji.url} alt="me" width="64" height="64" />
+                <Image
+                  src={emoji.url}
+                  alt="me"
+                  width="64"
+                  height="64"
+                  onClick={() => setCurrentEmoji(emoji.url)}
+                />
               ))}
             </div>
           ))}
@@ -61,7 +68,16 @@ export const EmojiEmoCircle = () => {
         className="flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-black border-opacity-10 shadow-xl"
         onClick={() => setShowContainer(!showContainer)}
       >
-        a
+        {currentEmoji && (
+          <div className="h-full w-full relative">
+            <Image
+              src={currentEmoji}
+              alt="me"
+              layout="fill"
+              objectFit="contain"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
