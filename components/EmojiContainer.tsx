@@ -115,7 +115,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
     <div className="fixed z-50 pr-28">
       {emojiContainerOpened ? (
         <div className="h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur">
-          <div>필기 이모지</div>
+          <div className="text-center text-xl mb-1">필기 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (

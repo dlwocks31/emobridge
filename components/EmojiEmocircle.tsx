@@ -112,27 +112,27 @@ export const EmojiEmoCircle = () => {
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
         <div
-          className="bg-gray-100 rounded-lg shadow-xl m-2 ring-2 ring-gray-200"
+          className="rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-2"
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
-          <div className="text-center text-xl">감정 이모지</div>
+          <div className="text-center text-xl mb-1">감정 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <figure>
+                <div className="flex flex-col justify-start items-center w-12 m-1">
                   <Image
                     src={emoji.url}
                     alt={emoji.def}
-                    width="64"
-                    height="64"
+                    width="50"
+                    height="50"
                     onClick={() => handleEmojiClick(emoji, { isLocal: true })}
                   />
-                  <div className="text-center text-base font-normal">
+                  <div className="text-center text-xs font-normal mt-1">
                     {" "}
                     {emoji.def}{" "}
                   </div>
-                </figure>
+                </div>
               ))}
             </div>
           ))}
