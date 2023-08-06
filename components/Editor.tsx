@@ -11,6 +11,7 @@ import "@blocknote/core/style.css";
 import {
   BlockNoteView,
   createReactBlockSpec,
+  InlineContent,
   useBlockNote,
 } from "@blocknote/react";
 import { useEffect, useMemo, useRef } from "react";
@@ -87,7 +88,9 @@ export const Editor = ({
         default: "" as const,
       },
     },
-    containsInlineContent: false,
+    // inlineContent is not actually required here, but not using it leads to
+    // "RangeError: Position 2 out of range" error for unknown reason
+    containsInlineContent: true,
     render: ({ block }) => {
       const getLeftClass = (emojiLength: number) => {
         if (emojiLength === 1) return "-left-24";
@@ -97,18 +100,24 @@ export const Editor = ({
       };
       return (
         <div className="relative">
+          <div className="hidden">
+            <InlineContent />
+          </div>
           <div
             className={
-              "absolute top-1 flex " +
-              getLeftClass(block.props.emoji.split(',').length)
+              "absolute flex " +
+              getLeftClass(block.props.emoji.split(",").length)
             }
           >
-            {block.props.emoji.split(',').map((emoji: string) => (
+            {block.props.emoji.split(",").map((emoji: string) => (
               <div
                 key={emoji}
                 onClick={() => {
                   console.log("removeBlocks", block.id, emoji);
-                  const newEmoji = block.props.emoji.split(',').filter(e => e !== emoji).join(',');
+                  const newEmoji = block.props.emoji
+                    .split(",")
+                    .filter((e) => e !== emoji)
+                    .join(",");
                   if (newEmoji.length === 0) {
                     console.log("textBlockId", block.props.textBlockId);
                     const textBlock = editorRef.current?.getBlock(
