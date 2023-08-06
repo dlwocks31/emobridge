@@ -10,15 +10,15 @@ interface Emoji {
 const emojiList: Emoji[] = [
   {
     url: "/good.png",
-    def: "좋아",
+    def: "좋아요",
   },
   {
     url: "/bad.png",
-    def: "별로야",
+    def: "별로예요",
   },
   {
     url: "/help.png",
-    def: "도와줘",
+    def: "도와주세요",
   },
   {
     url: "/fighting.png",
@@ -26,11 +26,11 @@ const emojiList: Emoji[] = [
   },
   {
     url: "/sleep.png",
-    def: "졸려",
+    def: "졸려요",
   },
   {
     url: "/nosleep.png",
-    def: "일어나",
+    def: "졸지마",
   },
   {
     url: "/thanks.png",
@@ -46,7 +46,7 @@ const emojiList: Emoji[] = [
   },
   {
     url: "/toilet.png",
-    def: "화장실",
+    def: "화장실\n가고 싶어",
   },
 ];
 const RowInfo = [

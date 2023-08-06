@@ -23,19 +23,19 @@ const emojiList = [
   },
   {
     url: "/curious.png",
-    def: "궁금해요",
+    def: "궁금해",
   },
   {
     url: "/enough.png",
-    def: "충분해요",
+    def: "충분해",
   },
   {
     url: "/easy.png",
-    def: "쉬워요",
+    def: "쉬워",
   },
   {
     url: "/hard.png",
-    def: "어려워요",
+    def: "어려워",
   },
 ];
 const RowInfo = [
