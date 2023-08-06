@@ -128,9 +128,8 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
                     height="50"
                     onClick={() => handleEmojiClick(emoji, { isLocal: true })}
                   />
-                  <div className="text-center text-xs font-normal mt-1">
-                    {" "}
-                    {emoji.def}{" "}
+                  <div className="text-xs w-16 font-normal text-center whitespace-pre-wrap ter mt-1">
+                    {emoji.def}
                   </div>
                 </div>
               ))}
@@ -153,9 +152,8 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
       >
         {currentEmoji && (
           <div
-            className={`h-full w-full relative transition-opacity ${
-              isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
-            }`}
+            className={`h-full w-full relative transition-opacity ${isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
+              }`}
           >
             <Image
               key={currentEmoji}

@@ -7,53 +7,35 @@ import { GlobalContext } from "../app/providers";
 const emojiList = [
   {
     url: "/important.png",
+    def: "중요해요",
   },
   {
     url: "/fix.png",
+    def: "고쳐주세요",
   },
   {
     url: "/more.png",
+    def: "더 자세하게\n써주세요",
   },
   {
     url: "/ppt.png",
+    def: "PPT대로\n써주세요",
   },
   {
     url: "/curious.png",
+    def: "궁금해요",
   },
   {
     url: "/enough.png",
+    def: "충분해요",
   },
   {
     url: "/easy.png",
+    def: "쉬워요",
   },
   {
     url: "/hard.png",
-  },
-];
-const titleList = [
-  {
-    title: "중요해요",
-  },
-  {
-    title: "고쳐주세요",
-  },
-  {
-    title: "더 자세하게\n써주세요",
-  },
-  {
-    title: "PPT대로\n써주세요",
-  },
-  {
-    title: "궁금해요",
-  },
-  {
-    title: "충분해요",
-  },
-  {
-    title: "쉬워요",
-  },
-  {
-    title: "어려워요",
+    def: "어려워요",
   },
 ];
 const RowInfo = [
@@ -122,7 +104,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
                 <div className="flex flex-col justify-start items-center w-16 m-1">
                   <Image
                     src={emoji.url}
-                    alt="me"
+                    alt={emoji.def}
                     width="50"
                     height="50"
                     onClick={() => {
@@ -131,7 +113,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
                     }}
                   />
                   <div className="text-xs w-20 text-center whitespace-pre-wrap mt-1">
-                    {titleList[row.start + index].title}
+                    {emoji.def}
                   </div>
                 </div>
               ))}
