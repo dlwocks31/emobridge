@@ -3,9 +3,9 @@ import {
   BlockNoteEditor as BlockNoteEditorOriginal,
   Block as BlockOriginal,
   BlockSchema,
+  PartialBlock as PartialBlockOriginal,
   defaultBlockSchema,
   defaultProps,
-  PartialBlock as PartialBlockOriginal,
 } from "@blocknote/core";
 import "@blocknote/core/style.css";
 import {
@@ -13,7 +13,7 @@ import {
   createReactBlockSpec,
   useBlockNote,
 } from "@blocknote/react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import { Emoji } from "./Emoji";
@@ -44,6 +44,11 @@ export type BlockNoteEditor = BlockNoteEditorOriginal<MyBlockSchema>;
 export type PartialBlock = PartialBlockOriginal<MyBlockSchema>;
 
 type Block = BlockOriginal<MyBlockSchema>;
+export interface EditorEmojiStatus {
+  blockId: string;
+  emojiUrls: string[];
+  height: number;
+}
 
 // Ref: https://github.com/TypeCellOS/BlockNote/blob/0ff6ed993eec400b3df720af95df26786770a3ea/packages/website/docs/.vitepress/theme/components/Examples/BlockNote/ReactBlockNote.tsx#L59
 // Our <Editor> component that we can now use
@@ -76,6 +81,34 @@ export const Editor = ({
     return [doc, provider];
   }, []);
 
+  const removeEmoji = (blockId: string, emojiUrl: string) => {
+    const block = editorRef.current?.getBlock(blockId);
+    if (!block) return;
+    console.log("removeBlocks", block.id, emojiUrl);
+    const newEmoji = block.props.emoji
+      .split(",")
+      .filter((e) => e !== emojiUrl)
+      .join(",");
+    if (newEmoji.length === 0) {
+      console.log("textBlockId", block.props.textBlockId);
+      const textBlock = editorRef.current?.getBlock(block.props.textBlockId);
+      if (textBlock) {
+        editorRef.current?.updateBlock(block.props.textBlockId, {
+          props: { backgroundColor: "transparent" },
+        });
+      }
+
+      editorRef.current?.removeBlocks([block]);
+    } else {
+      editorRef.current?.updateBlock(block, {
+        type: "emoji",
+        props: {
+          emoji: newEmoji,
+        },
+      });
+    }
+  };
+
   const EmojiBlock = createReactBlockSpec({
     type: "emoji",
     propSchema: {
@@ -88,60 +121,32 @@ export const Editor = ({
       },
     },
     containsInlineContent: false,
-    render: ({ block }) => {
-      const getLeftClass = (emojiLength: number) => {
-        if (emojiLength === 1) return "-left-24";
-        if (emojiLength === 2) return "-left-32";
-        if (emojiLength === 3) return "-left-40";
-        return "";
-      };
-      return (
-        <div className="relative">
-          <div
-            className={
-              "absolute flex " +
-              getLeftClass(block.props.emoji.split(",").length)
-            }
-          >
-            {block.props.emoji.split(",").map((emoji: string) => (
-              <div
-                key={emoji}
-                onClick={() => {
-                  console.log("removeBlocks", block.id, emoji);
-                  const newEmoji = block.props.emoji
-                    .split(",")
-                    .filter((e) => e !== emoji)
-                    .join(",");
-                  if (newEmoji.length === 0) {
-                    console.log("textBlockId", block.props.textBlockId);
-                    const textBlock = editorRef.current?.getBlock(
-                      block.props.textBlockId,
-                    );
-                    if (textBlock) {
-                      editorRef.current?.updateBlock(block.props.textBlockId, {
-                        props: { backgroundColor: "transparent" },
-                      });
-                    }
-
-                    editorRef.current?.removeBlocks([block]);
-                  } else {
-                    editorRef.current?.updateBlock(block, {
-                      type: "emoji",
-                      props: {
-                        emoji: newEmoji,
-                      },
-                    });
-                  }
-                }}
-              >
-                <Emoji emoji={emoji} />
-              </div>
-            ))}
-          </div>
-        </div>
-      );
+    render: () => {
+      return <div className="hidden"></div>;
     },
   });
+
+  const [editorEmojiStatus, setEditorEmojiStatus] = useState<
+    EditorEmojiStatus[]
+  >([]);
+
+  function updateAllEditorEmojiHeight(editor: BlockNoteEditor) {
+    const newEditorEmojiStatus: EditorEmojiStatus[] = [];
+    editor.forEachBlock((block: Block): boolean => {
+      if (block.type === "emoji") {
+        const blockElem = document.querySelector(`div[data-id='${block.id}']`);
+        if (blockElem) {
+          newEditorEmojiStatus.push({
+            blockId: block.id,
+            emojiUrls: block.props.emoji.split(","),
+            height: blockElem.getBoundingClientRect().top,
+          });
+        }
+      }
+      return true; // continue traverse
+    });
+    setEditorEmojiStatus(newEditorEmojiStatus);
+  }
 
   const editorRef = useRef<BlockNoteEditor | null>(null);
   // Creates a new editor instance.
@@ -172,6 +177,9 @@ export const Editor = ({
         prevBlockId: textCursorPosition.prevBlock?.id ?? null,
       });
     },
+    onEditorContentChange: (editor: BlockNoteEditor) => {
+      updateAllEditorEmojiHeight(editor);
+    },
   });
 
   useEffect(() => {
@@ -192,31 +200,51 @@ export const Editor = ({
 
   // Renders the editor instance using a React component.
   return editor ? (
-    <div className="border-2 flex-grow flex flex-col">
-      <BlockNoteView editor={editor} />
-      <div
-        className="flex-grow"
-        onClick={() => {
-          // https://stackoverflow.com/a/3866442
-          function setEndOfContenteditable(
-            contentEditableElement: HTMLElement,
-          ) {
-            var range, selection;
-            range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-            range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
-            range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-            selection = window.getSelection(); //get the selection object (allows you to change selection)
-            selection?.removeAllRanges(); //remove any selections already made
-            selection?.addRange(range); //make the range you have just created the visible selection
-          }
-          const editable = document.querySelector<HTMLElement>(
-            "[contenteditable=true]",
-          );
-          if (editable) {
-            setEndOfContenteditable(editable);
-          }
-        }}
-      ></div>
+    <div className="flex flex-grow">
+      <div className="w-0 justify-end flex pr-1">
+        {editorEmojiStatus.map((e) => (
+          <div
+            key={e.blockId}
+            className="absolute flex"
+            style={{ top: e.height }}
+          >
+            {e.emojiUrls.map((emojiUrl) => (
+              <div
+                key={emojiUrl}
+                onClick={() => removeEmoji(e.blockId, emojiUrl)}
+              >
+                <Emoji emoji={emojiUrl} />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="border-2 flex flex-col flex-grow">
+        <BlockNoteView editor={editor} />
+        <div
+          className="flex-grow"
+          onClick={() => {
+            // https://stackoverflow.com/a/3866442
+            function setEndOfContenteditable(
+              contentEditableElement: HTMLElement,
+            ) {
+              var range, selection;
+              range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+              range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+              range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+              selection = window.getSelection(); //get the selection object (allows you to change selection)
+              selection?.removeAllRanges(); //remove any selections already made
+              selection?.addRange(range); //make the range you have just created the visible selection
+            }
+            const editable = document.querySelector<HTMLElement>(
+              "[contenteditable=true]",
+            );
+            if (editable) {
+              setEndOfContenteditable(editable);
+            }
+          }}
+        ></div>
+      </div>
     </div>
   ) : (
     <div className="text-center">에디터 로딩중..</div>
