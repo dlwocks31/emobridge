@@ -11,7 +11,6 @@ import "@blocknote/core/style.css";
 import {
   BlockNoteView,
   createReactBlockSpec,
-  InlineContent,
   useBlockNote,
 } from "@blocknote/react";
 import { useEffect, useMemo, useRef } from "react";
@@ -90,7 +89,7 @@ export const Editor = ({
     },
     // inlineContent is not actually required here, but not using it leads to
     // "RangeError: Position 2 out of range" error for unknown reason
-    containsInlineContent: true,
+    containsInlineContent: false,
     render: ({ block }) => {
       const getLeftClass = (emojiLength: number) => {
         if (emojiLength === 1) return "-left-24";
@@ -100,9 +99,6 @@ export const Editor = ({
       };
       return (
         <div className="relative">
-          <div className="hidden">
-            <InlineContent />
-          </div>
           <div
             className={
               "absolute flex " +
