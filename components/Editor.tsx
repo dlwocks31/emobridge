@@ -87,8 +87,6 @@ export const Editor = ({
         default: "" as const,
       },
     },
-    // inlineContent is not actually required here, but not using it leads to
-    // "RangeError: Position 2 out of range" error for unknown reason
     containsInlineContent: false,
     render: ({ block }) => {
       const getLeftClass = (emojiLength: number) => {
