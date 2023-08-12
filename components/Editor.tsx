@@ -180,17 +180,14 @@ export const Editor = ({
     onEditorContentChange: (editor: BlockNoteEditor) => {
       updateAllEditorEmojiHeight(editor);
     },
+    onEditorReady: (editor: BlockNoteEditor) => {
+      editorRef.current = editor;
+      updateAllEditorEmojiHeight(editor);
+      if (onEditorReady) {
+        onEditorReady(editor);
+      }
+    },
   });
-
-  useEffect(() => {
-    editorRef.current = editor;
-  }, [editor]);
-
-  useEffect(() => {
-    if (onEditorReady) {
-      onEditorReady(editor);
-    }
-  }, [editor, onEditorReady]);
 
   useEffect(() => {
     if (editor) {
