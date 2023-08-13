@@ -112,7 +112,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
         <div
-          className="rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-50 backdrop-filter backdrop-blur mb-2"
+          className="rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-2"
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
@@ -142,7 +142,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
           "flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
           (showCircle
             ? " ring-2 ring-gray-200 shadow-xl"
-            : " transition-opacity duration-200 bg-opacity-40 border-opacity-20")
+            : " transition-opacity duration-200 bg-opacity-50 border-opacity-20")
         }
         onClick={() => {
           setShowContainer(!showContainer), setShowCircle(true);
