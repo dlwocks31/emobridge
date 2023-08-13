@@ -139,7 +139,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
       )}
       <div
         className={
-          "flex h-32 w-32 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
+          "flex h-28 w-28 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
           (showCircle
             ? " ring-2 ring-gray-200 shadow-xl"
             : " transition-opacity duration-200 bg-opacity-50 border-opacity-20")
@@ -152,9 +152,8 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
       >
         {currentEmoji && (
           <div
-            className={`h-full w-full relative transition-opacity ${
-              isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
-            }`}
+            className={`h-full w-full relative transition-opacity ${isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
+              }`}
           >
             <Image
               key={currentEmoji}
