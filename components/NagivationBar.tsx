@@ -1,20 +1,15 @@
-
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { MuseoModerno } from "next/font/google";
 import { cookies } from "next/headers";
-import { LinkWithRoute } from "./LinkWithRoute";
-import { UserInfo } from "./UserInfo";
-import { MuseoModerno } from "next/font/google"
-import { EmojiOpenBtn } from "./EmojiOpenBtn"
+import { EmojiOpenBtn } from "./EmojiOpenBtn";
 
 const museoModerno = MuseoModerno({
-  weight: '800',
-  subsets: ['latin']
-})
+  weight: "800",
+  subsets: ["latin"],
+});
 
 export async function NavigationBar() {
   const supabase = createServerComponentClient({ cookies });
-  
-  
 
   const {
     data: { user },
@@ -25,13 +20,15 @@ export async function NavigationBar() {
     <>
       <nav className="flex items-center justify-between p-4 bg-yellow-400 text-black fixed z-40 w-full px-28 h-16">
         <div className="flex items-center mr-6">
-          <span className={"font-semibold text-xl " + museoModerno.className}>Emobridge</span>
+          <span className={"font-semibold text-xl " + museoModerno.className}>
+            Emobridge
+          </span>
         </div>
         <div className="block">
           <ul className="flex">
             <li className="mr-6">
               {/* <LinkWithRoute href="/feedbacker" text="emoji" /> */}
-              <EmojiOpenBtn/>
+              <EmojiOpenBtn />
             </li>
             {/* <li className="mr-6">
               <LinkWithRoute href="/feedbacker" text="장애학생 페이지" />

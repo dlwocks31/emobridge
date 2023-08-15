@@ -8,8 +8,9 @@ export function LinkWithRoute({ href, text }: { href: string; text: string }) {
   return (
     <Link
       href={href}
-      className={`text-black hover:text-blue-300 ${pathname === href ? "font-bold" : ""
-        }`}
+      className={`text-black hover:text-blue-300 ${
+        pathname === href ? "font-bold" : ""
+      }`}
     >
       {text}
     </Link>

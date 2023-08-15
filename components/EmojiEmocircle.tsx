@@ -152,8 +152,9 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
       >
         {currentEmoji && (
           <div
-            className={`h-full w-full relative transition-opacity ${isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
-              }`}
+            className={`h-full w-full relative transition-opacity ${
+              isEmojiVisible ? "opacity-100" : "opacity-0 duration-200"
+            }`}
           >
             <Image
               key={currentEmoji}

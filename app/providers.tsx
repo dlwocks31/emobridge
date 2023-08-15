@@ -1,28 +1,24 @@
-'use client';
-import { Dispatch, SetStateAction, useState, createContext } from "react";
+"use client";
+import { Dispatch, SetStateAction, createContext, useState } from "react";
 
 interface IGlobalContext {
-    emojiContainerOpened: boolean;
-    setEmojiContainerOpened : Dispatch<SetStateAction<boolean>>;
-  }
-  
+  emojiContainerOpened: boolean;
+  setEmojiContainerOpened: Dispatch<SetStateAction<boolean>>;
+}
+
 export const GlobalContext = createContext<IGlobalContext>({
-    emojiContainerOpened:false,
-    setEmojiContainerOpened: () => {}
+  emojiContainerOpened: false,
+  setEmojiContainerOpened: () => {},
 });
 
-export function Providers({ children }: {
-    children: React.ReactNode;
-  }) {
-    const [emojiContainerOpened, setEmojiContainerOpened] = useState(true)
+export function Providers({ children }: { children: React.ReactNode }) {
+  const [emojiContainerOpened, setEmojiContainerOpened] = useState(true);
   const value = {
     emojiContainerOpened,
-    setEmojiContainerOpened
-  }
-    
+    setEmojiContainerOpened,
+  };
+
   return (
-    <GlobalContext.Provider value={value}>
-        {children}
-    </GlobalContext.Provider>
+    <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
   );
 }

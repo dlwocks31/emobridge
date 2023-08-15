@@ -1,11 +1,10 @@
-import { Providers } from './providers';
 import { NavigationBar } from "@/components/NagivationBar";
 import "./globals.css";
+import { Providers } from "./providers";
 export const metadata = {
   title: "Emobridge",
   description: "Emobridge",
 };
-
 
 export const dynamic = "force-dynamic";
 export default function RootLayout({
