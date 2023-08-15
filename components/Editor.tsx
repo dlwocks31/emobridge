@@ -14,6 +14,7 @@ import {
   useBlockNote,
 } from "@blocknote/react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import OutsideClickHandler from "react-outside-click-handler";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import { Emoji } from "./Emoji";
@@ -45,7 +46,8 @@ export type PartialBlock = PartialBlockOriginal<MyBlockSchema>;
 
 type Block = BlockOriginal<MyBlockSchema>;
 export interface EditorEmojiStatus {
-  blockId: string;
+  blockId: string | null; // null if virtual block. ex placeholder
+  textBlockId: string;
   emojiUrls: string[];
   height: number;
 }
@@ -80,6 +82,15 @@ export const Editor = ({
     );
     return [doc, provider];
   }, []);
+
+  const [editorEmojiStatus, setEditorEmojiStatus] = useState<
+    EditorEmojiStatus[]
+  >([]);
+
+  const [focusedBlock, setFocusedBlock] = useState<{
+    id: string;
+    height: number;
+  } | null>(null);
 
   const removeEmoji = (blockId: string, emojiUrl: string) => {
     const block = editorRef.current?.getBlock(blockId);
@@ -121,14 +132,8 @@ export const Editor = ({
       },
     },
     containsInlineContent: false,
-    render: () => {
-      return <div className="hidden"></div>;
-    },
+    render: () => <div className="hidden"></div>,
   });
-
-  const [editorEmojiStatus, setEditorEmojiStatus] = useState<
-    EditorEmojiStatus[]
-  >([]);
 
   function updateAllEditorEmojiHeight(editor: BlockNoteEditor) {
     const newEditorEmojiStatus: EditorEmojiStatus[] = [];
@@ -138,6 +143,7 @@ export const Editor = ({
         if (blockElem) {
           newEditorEmojiStatus.push({
             blockId: block.id,
+            textBlockId: block.props.textBlockId,
             emojiUrls: block.props.emoji.split(","),
             height: blockElem.getBoundingClientRect().top,
           });
@@ -147,6 +153,80 @@ export const Editor = ({
     });
     setEditorEmojiStatus(newEditorEmojiStatus);
   }
+
+  function setFocusedBlockId(id: string | null) {
+    if (!id) {
+      setFocusedBlock(null);
+      return;
+    }
+    const blockElem = document.querySelector(`div[data-id='${id}']`);
+    if (blockElem) {
+      setFocusedBlock({
+        id,
+        height: blockElem.getBoundingClientRect().top,
+      });
+    } else {
+      console.warn("blockElem not found", id);
+      setFocusedBlock(null);
+    }
+  }
+
+  function updateFocusedBlockHeight() {
+    if (!focusedBlock) return;
+    const blockElem = document.querySelector(
+      `div[data-id='${focusedBlock.id}']`,
+    );
+    if (blockElem) {
+      setFocusedBlock({
+        ...focusedBlock,
+        height: blockElem.getBoundingClientRect().top,
+      });
+    } else {
+      console.warn("blockElem not found", focusedBlock.id);
+      setFocusedBlock(null);
+    }
+  }
+
+  const editorEmojiStatusWithPlaceholder = useMemo(() => {
+    console.log("in editorEmojiStatusWithPlaceholder");
+    if (!focusedBlock) {
+      console.log("no focusedBlock");
+      return editorEmojiStatus;
+    }
+    console.log("focusedBlock", focusedBlock);
+    const focusedBlockStatus = editorEmojiStatus.find(
+      (status) => status.textBlockId === focusedBlock.id,
+    );
+    if (focusedBlockStatus) {
+      // merge with focusedBlockStatus
+      return editorEmojiStatus.map((status) => {
+        if (status.textBlockId === focusedBlock.id) {
+          return {
+            ...status,
+            emojiUrls:
+              status.emojiUrls.length < 3
+                ? status.emojiUrls.concat(["/placeholder.png"])
+                : status.emojiUrls,
+          };
+        }
+        return status;
+      });
+    } else {
+      return editorEmojiStatus.concat([
+        {
+          blockId: null,
+          textBlockId: focusedBlock.id,
+          emojiUrls: ["/placeholder.png"],
+          height: focusedBlock.height,
+        },
+      ]);
+    }
+  }, [editorEmojiStatus, focusedBlock]);
+
+  console.log(
+    "editorEmojiStatusWithPlaceholder",
+    editorEmojiStatusWithPlaceholder,
+  );
 
   const editorRef = useRef<BlockNoteEditor | null>(null);
   // Creates a new editor instance.
@@ -176,9 +256,11 @@ export const Editor = ({
         nextBlockId: textCursorPosition.nextBlock?.id ?? null,
         prevBlockId: textCursorPosition.prevBlock?.id ?? null,
       });
+      setFocusedBlockId(textCursorPosition.block.id);
     },
     onEditorContentChange: (editor: BlockNoteEditor) => {
       updateAllEditorEmojiHeight(editor);
+      updateFocusedBlockHeight();
     },
     onEditorReady: (editor: BlockNoteEditor) => {
       editorRef.current = editor;
@@ -199,7 +281,7 @@ export const Editor = ({
   return editor ? (
     <div className="flex flex-grow">
       <div className="w-0 justify-end flex pr-1">
-        {editorEmojiStatus.map((e) => (
+        {editorEmojiStatusWithPlaceholder.map((e) => (
           <div
             key={e.blockId}
             className="absolute flex"
@@ -208,7 +290,11 @@ export const Editor = ({
             {e.emojiUrls.map((emojiUrl) => (
               <div
                 key={emojiUrl}
-                onClick={() => removeEmoji(e.blockId, emojiUrl)}
+                onClick={() => {
+                  if (e.blockId) {
+                    removeEmoji(e.blockId, emojiUrl);
+                  }
+                }}
               >
                 <Emoji emoji={emojiUrl} />
               </div>
@@ -217,30 +303,41 @@ export const Editor = ({
         ))}
       </div>
       <div className="border-2 flex flex-col flex-grow">
-        <BlockNoteView editor={editor} theme="light" />
-        <div
-          className="flex-grow"
-          onClick={() => {
-            // https://stackoverflow.com/a/3866442
-            function setEndOfContenteditable(
-              contentEditableElement: HTMLElement,
-            ) {
-              var range, selection;
-              range = document.createRange(); //Create a range (a range is a like the selection but invisible)
-              range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
-              range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
-              selection = window.getSelection(); //get the selection object (allows you to change selection)
-              selection?.removeAllRanges(); //remove any selections already made
-              selection?.addRange(range); //make the range you have just created the visible selection
-            }
-            const editable = document.querySelector<HTMLElement>(
-              "[contenteditable=true]",
-            );
-            if (editable) {
-              setEndOfContenteditable(editable);
+        <OutsideClickHandler
+          onOutsideClick={(e: MouseEvent) => {
+            // FIXME: 원래 의도는 "이모지 입력"을 제외한 outside click일때 focused block을 없애는 것.
+            // 그렇게 하는 이유는 이모지 입력 시에도 focused block을 없애면, 이모지 입력을 하나 한 후에 어포던스가 없어지는 이상한 사용경험이 나타나기 때문.
+            // 하지만 이게 모든 img tag를 무시하는 건 이상하다. 더 좋은 방법이 있을 것.
+            if ((e.target as HTMLElement)?.tagName !== "IMG") {
+              setFocusedBlockId(null);
             }
           }}
-        ></div>
+        >
+          <BlockNoteView editor={editor} theme="light" />
+          <div
+            className="flex-grow"
+            onClick={() => {
+              // https://stackoverflow.com/a/3866442
+              function setEndOfContenteditable(
+                contentEditableElement: HTMLElement,
+              ) {
+                var range, selection;
+                range = document.createRange(); //Create a range (a range is a like the selection but invisible)
+                range.selectNodeContents(contentEditableElement); //Select the entire contents of the element with the range
+                range.collapse(false); //collapse the range to the end point. false means collapse to end rather than the start
+                selection = window.getSelection(); //get the selection object (allows you to change selection)
+                selection?.removeAllRanges(); //remove any selections already made
+                selection?.addRange(range); //make the range you have just created the visible selection
+              }
+              const editable = document.querySelector<HTMLElement>(
+                "[contenteditable=true]",
+              );
+              if (editable) {
+                setEndOfContenteditable(editable);
+              }
+            }}
+          ></div>
+        </OutsideClickHandler>
       </div>
     </div>
   ) : (
