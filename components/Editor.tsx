@@ -217,7 +217,7 @@ export const Editor = ({
         ))}
       </div>
       <div className="border-2 flex flex-col flex-grow">
-        <BlockNoteView editor={editor} />
+        <BlockNoteView editor={editor} theme="light" />
         <div
           className="flex-grow"
           onClick={() => {
