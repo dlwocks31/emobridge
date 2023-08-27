@@ -75,7 +75,7 @@ export const Editor = ({
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
     const provider = new YPartyKitProvider(
-      "blocknote-dev.yousefed.partykit.dev",
+      "emobridge.dlwocks31.partykit.dev",
       // use a unique name as a "room" for your application:
       docId ? `jaechan-lee-project-${docId}` : "jaechan-lee-project",
       doc,
