@@ -137,9 +137,14 @@ export const Editor = ({
 
   function updateAllEditorEmojiHeight(editor: BlockNoteEditor) {
     const newEditorEmojiStatus: EditorEmojiStatus[] = [];
+    const emojiBlocksToRemove: string[] = [];
     editor.forEachBlock((block: Block): boolean => {
       if (block.type === "emoji") {
-        const blockElem = document.querySelector(`div[data-id='${block.id}']`);
+        const blockElem = document.querySelector(
+          `div[data-id='${block.props.textBlockId}']`,
+        );
+        console.log({ block, blockElem });
+
         if (blockElem) {
           newEditorEmojiStatus.push({
             blockId: block.id,
@@ -147,11 +152,17 @@ export const Editor = ({
             emojiUrls: block.props.emoji.split(","),
             height: blockElem.getBoundingClientRect().top,
           });
+        } else {
+          console.warn("blockElem not found", block.props.textBlockId);
+          emojiBlocksToRemove.push(block.id);
         }
       }
       return true; // continue traverse
     });
     setEditorEmojiStatus(newEditorEmojiStatus);
+    if (emojiBlocksToRemove.length > 0) {
+      editor.removeBlocks(emojiBlocksToRemove);
+    }
   }
 
   function setFocusedBlockId(id: string | null) {
@@ -249,6 +260,7 @@ export const Editor = ({
       emoji: EmojiBlock,
     },
     onTextCursorPositionChange: (editor: BlockNoteEditor) => {
+      console.log(editor.topLevelBlocks);
       const textCursorPosition = editor.getTextCursorPosition();
       console.log("textCursorPosition", textCursorPosition);
       onTextCursorPositionChange?.({
