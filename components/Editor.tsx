@@ -52,6 +52,10 @@ export interface EditorEmojiStatus {
   height: number;
 }
 
+const getAbsoluteTop = (elem: HTMLElement) => {
+  return elem.getBoundingClientRect().top + window.scrollY;
+};
+
 // Ref: https://github.com/TypeCellOS/BlockNote/blob/0ff6ed993eec400b3df720af95df26786770a3ea/packages/website/docs/.vitepress/theme/components/Examples/BlockNote/ReactBlockNote.tsx#L59
 // Our <Editor> component that we can now use
 export const Editor = ({
@@ -142,7 +146,7 @@ export const Editor = ({
       if (block.type === "emoji") {
         const blockElem = document.querySelector(
           `div[data-id='${block.props.textBlockId}']`,
-        );
+        ) as HTMLElement | null;
         console.log({ block, blockElem });
 
         if (blockElem) {
@@ -150,7 +154,7 @@ export const Editor = ({
             blockId: block.id,
             textBlockId: block.props.textBlockId,
             emojiUrls: block.props.emoji.split(","),
-            height: blockElem.getBoundingClientRect().top,
+            height: getAbsoluteTop(blockElem),
           });
         } else {
           console.warn("blockElem not found", block.props.textBlockId);
@@ -170,11 +174,13 @@ export const Editor = ({
       setFocusedBlock(null);
       return;
     }
-    const blockElem = document.querySelector(`div[data-id='${id}']`);
+    const blockElem = document.querySelector(
+      `div[data-id='${id}']`,
+    ) as HTMLElement | null;
     if (blockElem) {
       setFocusedBlock({
         id,
-        height: blockElem.getBoundingClientRect().top,
+        height: getAbsoluteTop(blockElem),
       });
     } else {
       console.warn("blockElem not found", id);
@@ -186,11 +192,11 @@ export const Editor = ({
     if (!focusedBlock) return;
     const blockElem = document.querySelector(
       `div[data-id='${focusedBlock.id}']`,
-    );
+    ) as HTMLElement | null;
     if (blockElem) {
       setFocusedBlock({
         ...focusedBlock,
-        height: blockElem.getBoundingClientRect().top,
+        height: getAbsoluteTop(blockElem),
       });
     } else {
       console.warn("blockElem not found", focusedBlock.id);
@@ -199,12 +205,9 @@ export const Editor = ({
   }
 
   const editorEmojiStatusWithPlaceholder = useMemo(() => {
-    console.log("in editorEmojiStatusWithPlaceholder");
     if (!focusedBlock) {
-      console.log("no focusedBlock");
       return editorEmojiStatus;
     }
-    console.log("focusedBlock", focusedBlock);
     const focusedBlockStatus = editorEmojiStatus.find(
       (status) => status.textBlockId === focusedBlock.id,
     );
@@ -260,9 +263,7 @@ export const Editor = ({
       emoji: EmojiBlock,
     },
     onTextCursorPositionChange: (editor: BlockNoteEditor) => {
-      console.log(editor.topLevelBlocks);
       const textCursorPosition = editor.getTextCursorPosition();
-      console.log("textCursorPosition", textCursorPosition);
       onTextCursorPositionChange?.({
         blockId: textCursorPosition.block.id,
         nextBlockId: textCursorPosition.nextBlock?.id ?? null,
