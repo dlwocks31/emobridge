@@ -47,48 +47,57 @@ const RowInfo = [
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
   const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
   const handleEmojiClick = (emoji: string) => {
+    if (!focusedBlockId) return;
     const textCursorPosition = editor.getTextCursorPosition();
-    if (textCursorPosition.block.id) {
-      const block = editor?.getBlock(textCursorPosition.block.id);
-      const prevBlock = textCursorPosition?.prevBlock?.id
-        ? editor?.getBlock(textCursorPosition.prevBlock?.id)
-        : null;
+    if (!textCursorPosition.block.id) return;
 
-      if (prevBlock?.type === "emoji") {
-        const mergeString = (initial: string, next: string) => {
-          const initialLength = initial.split(",").length;
-          if (initial.includes(next) || initialLength >= 3) {
-            return initial;
-          }
-          return initial + "," + next;
-        };
-        editor?.updateBlock(prevBlock, {
-          type: "emoji",
-          props: {
-            emoji: mergeString(prevBlock.props.emoji, emoji),
-          },
-        });
-        if (block) {
-          editor?.updateBlock(block, {
-            props: { backgroundColor: "gray" },
-          });
+    if (focusedBlockId && focusedBlockId != textCursorPosition.block.id) {
+      console.warn(
+        "focusedBlockId is not same with textCursorPosition.block.id",
+      );
+    }
+
+    const block = editor?.getBlock(textCursorPosition.block.id);
+    const prevBlock = textCursorPosition?.prevBlock?.id
+      ? editor?.getBlock(textCursorPosition.prevBlock?.id)
+      : null;
+
+    if (prevBlock?.type === "emoji") {
+      // 이전 블록이 이모지 블록이면, 기존 이모지 블록에 추가
+      const mergeString = (initial: string, next: string) => {
+        const initialLength = initial.split(",").length;
+        if (initial.includes(next) || initialLength >= 3) {
+          return initial;
         }
-        return;
-      } else if (block) {
-        const blocksToInsert: PartialBlock[] = [
-          {
-            type: "emoji",
-            props: {
-              emoji,
-              textBlockId: block.id,
-            },
-          },
-        ];
-        editor?.insertBlocks(blocksToInsert, block.id);
+        return initial + "," + next;
+      };
+      editor?.updateBlock(prevBlock, {
+        type: "emoji",
+        props: {
+          emoji: mergeString(prevBlock.props.emoji, emoji),
+        },
+      });
+      if (block) {
         editor?.updateBlock(block, {
           props: { backgroundColor: "gray" },
         });
       }
+      return;
+    } else if (block) {
+      // 이전 블록이 이모지 블록이 아니면, 새로운 이모지 블록 생성
+      const blocksToInsert: PartialBlock[] = [
+        {
+          type: "emoji",
+          props: {
+            emoji,
+            textBlockId: block.id,
+          },
+        },
+      ];
+      editor?.insertBlocks(blocksToInsert, block.id);
+      editor?.updateBlock(block, {
+        props: { backgroundColor: "gray" },
+      });
     }
   };
 
