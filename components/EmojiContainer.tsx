@@ -107,7 +107,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
         <div
           className={
             "h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur " +
-            (focusedBlockId ? "opacity-100" : "opacity-50")
+            (focusedBlockId ? "opacity-100" : "opacity-100")
           }
         >
           <div className="text-center text-xl mb-1">필기 이모지</div>
