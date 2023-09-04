@@ -45,8 +45,7 @@ const RowInfo = [
 ];
 
 export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
-  const { emojiContainerOpened, setEmojiContainerOpened } =
-    useContext(GlobalContext);
+  const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
   const handleEmojiClick = (emoji: string) => {
     const textCursorPosition = editor.getTextCursorPosition();
     if (textCursorPosition.block.id) {
@@ -96,7 +95,12 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
   return (
     <div className="fixed z-50 pr-28">
       {emojiContainerOpened ? (
-        <div className="h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur">
+        <div
+          className={
+            "h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur " +
+            (focusedBlockId ? "opacity-100" : "opacity-50")
+          }
+        >
           <div className="text-center text-xl mb-1">필기 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">

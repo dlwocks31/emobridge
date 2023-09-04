@@ -13,10 +13,11 @@ import {
   createReactBlockSpec,
   useBlockNote,
 } from "@blocknote/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
+import { GlobalContext } from "../app/providers";
 import { Emoji } from "./Emoji";
 
 export type MyBlockSchema = BlockSchema & {
@@ -76,6 +77,8 @@ export const Editor = ({
   userName?: string;
   docId?: string;
 }) => {
+  const { setFocusedBlockId: setFocusedBlockIdGlobal } =
+    useContext(GlobalContext);
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
     const provider = new YPartyKitProvider(
@@ -172,12 +175,14 @@ export const Editor = ({
   function setFocusedBlockId(id: string | null) {
     if (!id) {
       setFocusedBlock(null);
+      setFocusedBlockIdGlobal(null);
       return;
     }
     const blockElem = document.querySelector(
       `div[data-id='${id}']`,
     ) as HTMLElement | null;
     if (blockElem) {
+      setFocusedBlockIdGlobal(id);
       setFocusedBlock({
         id,
         height: getAbsoluteTop(blockElem),
