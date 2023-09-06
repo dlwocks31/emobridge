@@ -20,7 +20,7 @@ export function CourseShow({
       {docs.map((d) => (
         <div key={d.id}>
           <Link
-            className="btn w-full flex justify-between px-4"
+            className="btn w-full flex justify-between px-4 no-animation"
             href={`/${at}/doc/${d.id}`}
           >
             <div>{d.name}</div>

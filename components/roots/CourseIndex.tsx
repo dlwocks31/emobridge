@@ -44,8 +44,11 @@ export function CourseIndex({ at }: { at: "editor" | "feedbacker" }) {
       <div className="text-xl font-bold">수업 목록</div>
       {mockCourses.map((c) => (
         <div key={c.id}>
-          <Link className="btn w-72" href={`/${at}/course/${c.id}`}>
-            {c.name}
+          <Link
+            className="btn w-full flex justify-start no-animation"
+            href={`/${at}/course/${c.id}`}
+          >
+            <div>{c.name}</div>
           </Link>
         </div>
       ))}
