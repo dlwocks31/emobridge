@@ -7,7 +7,7 @@ export default function EditorLayout({
 }) {
   return (
     <div className="flex flex-col min-h-screen">
-      <NavigationBar color="bg-[#ECF1F3]" />
+      <NavigationBar color="bg-[#ECF1F3]" to="editor" />
       <main className="flex flex-col flex-grow">{children}</main>
     </div>
   );

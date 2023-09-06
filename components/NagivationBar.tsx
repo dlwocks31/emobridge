@@ -1,6 +1,7 @@
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { MuseoModerno } from "next/font/google";
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { EmojiOpenBtn } from "./EmojiOpenBtn";
 
 const museoModerno = MuseoModerno({
@@ -8,7 +9,13 @@ const museoModerno = MuseoModerno({
   subsets: ["latin"],
 });
 
-export async function NavigationBar({ color }: { color: string }) {
+export async function NavigationBar({
+  color,
+  to,
+}: {
+  color: string;
+  to: "editor" | "feedbacker";
+}) {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -25,9 +32,11 @@ export async function NavigationBar({ color }: { color: string }) {
         }
       >
         <div className="flex items-center mr-6">
-          <span className={"font-semibold text-xl " + museoModerno.className}>
-            Emobridge
-          </span>
+          <Link href={`/${to}/course`}>
+            <span className={"font-semibold text-xl " + museoModerno.className}>
+              Emobridge
+            </span>
+          </Link>
         </div>
         <div className="block">
           <ul className="flex">
