@@ -1,4 +1,3 @@
-import { NavigationBar } from "@/components/NagivationBar";
 import "./globals.css";
 import { Providers } from "./providers";
 export const metadata = {
@@ -15,12 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen">
-        <Providers>
-          <NavigationBar />
-          <main className="flex flex-col items-center justify-center flex-grow mt-20">
-            {children}
-          </main>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

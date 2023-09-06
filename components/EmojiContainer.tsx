@@ -102,7 +102,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
   };
 
   return (
-    <div className="fixed z-50 pr-28">
+    <div className="fixed z-50">
       {emojiContainerOpened ? (
         <div
           className={

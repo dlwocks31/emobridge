@@ -8,7 +8,7 @@ const museoModerno = MuseoModerno({
   subsets: ["latin"],
 });
 
-export async function NavigationBar() {
+export async function NavigationBar({ color }: { color: string }) {
   const supabase = createServerComponentClient({ cookies });
 
   const {
@@ -18,7 +18,12 @@ export async function NavigationBar() {
   console.log(user);
   return (
     <>
-      <nav className="flex items-center justify-between p-4 bg-yellow-400 text-black fixed z-40 w-full px-28 h-16">
+      <nav
+        className={
+          "flex items-center justify-between p-4 text-black fixed z-40 w-full px-28 h-16 " +
+          color
+        }
+      >
         <div className="flex items-center mr-6">
           <span className={"font-semibold text-xl " + museoModerno.className}>
             Emobridge
