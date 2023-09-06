@@ -37,7 +37,7 @@ export function Feedbacker({
         />
         <label htmlFor="checkbox">편집 활성화</label>
       </div>
-      <div className="px-28 py-4 flex-grow flex flex-col">
+      <div className="py-4 flex-grow flex flex-col">
         <Editor
           editable={editable}
           onEditorReady={handleEditorReady}

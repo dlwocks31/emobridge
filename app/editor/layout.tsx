@@ -6,11 +6,9 @@ export default function EditorLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <NavigationBar color="bg-[#ECF1F3]" />
-      <main className="flex flex-col items-center justify-center flex-grow mt-20">
-        {children}
-      </main>
-    </>
+      <main className="flex flex-col flex-grow">{children}</main>
+    </div>
   );
 }

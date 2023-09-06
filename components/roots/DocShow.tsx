@@ -25,11 +25,11 @@ export function DocShow({ user, id }: { user: User | null; id: string }) {
   const [editable, setEditable] = useState(false);
 
   return (
-    <div className="w-full flex-grow flex flex-col px-28 ">
+    <div className="w-full flex-grow flex flex-col">
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} /> : null}
       </div>
-      <div>제목: {doc.name}</div>
+      <div className="font-bold text-xl">제목: {doc.name}</div>
       <div className="flex justify-center items-center mt-2">
         <input
           type="checkbox"

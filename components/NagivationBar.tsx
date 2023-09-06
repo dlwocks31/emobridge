@@ -20,7 +20,7 @@ export async function NavigationBar({ color }: { color: string }) {
     <>
       <nav
         className={
-          "flex items-center justify-between p-4 text-black fixed z-40 w-full px-28 h-16 " +
+          "flex items-center justify-between p-4 text-black z-40 w-full px-28 h-16 " +
           color
         }
       >

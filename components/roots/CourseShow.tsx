@@ -14,12 +14,12 @@ export function CourseShow({
   }
   const docs = mockDocs.filter((d) => d.courseId === course.id);
   return (
-    <div>
-      <div>Course Name: {course.name}</div>
-      <div>Docs:</div>
+    <div className="flex flex-col gap-2">
+      <div className="text-xl font-bold">수업: {course.name}</div>
+      <div className="text-lg font-bold">문서:</div>
       {docs.map((d) => (
         <div key={d.id}>
-          <Link className="btn" href={`/${at}/doc/${d.id}`}>
+          <Link className="btn w-72" href={`/${at}/doc/${d.id}`}>
             {d.name}
           </Link>
         </div>

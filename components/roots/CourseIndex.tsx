@@ -40,11 +40,11 @@ export const mockDocs = [
 ];
 export function CourseIndex({ at }: { at: "editor" | "feedbacker" }) {
   return (
-    <div>
-      <h1>수업 목록</h1>
+    <div className="flex flex-col gap-2">
+      <div className="text-xl font-bold">수업 목록</div>
       {mockCourses.map((c) => (
         <div key={c.id}>
-          <Link className="btn" href={`/${at}/course/${c.id}`}>
+          <Link className="btn w-72" href={`/${at}/course/${c.id}`}>
             {c.name}
           </Link>
         </div>

@@ -14,7 +14,7 @@ export default async function Notetaker({
   } = await supabase.auth.getUser();
 
   return (
-    <div className="w-full px-28 py-8 flex-grow flex">
+    <div className="w-full py-8 flex-grow flex">
       <Editor
         editable={true}
         userName={user?.user_metadata?.full_name}
