@@ -1,6 +1,6 @@
+import dayjs from "dayjs";
 import Link from "next/link";
 import { mockCourses, mockDocs } from "./CourseIndex";
-
 export function CourseShow({
   id,
   at,
@@ -19,8 +19,12 @@ export function CourseShow({
       <div className="text-lg font-bold">문서:</div>
       {docs.map((d) => (
         <div key={d.id}>
-          <Link className="btn w-72" href={`/${at}/doc/${d.id}`}>
-            {d.name}
+          <Link
+            className="btn w-full flex justify-between px-4"
+            href={`/${at}/doc/${d.id}`}
+          >
+            <div>{d.name}</div>
+            <div>{dayjs(d.createdAt).format("YYYY-MM-DD HH:mm:ss")}</div>
           </Link>
         </div>
       ))}
