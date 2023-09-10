@@ -3,6 +3,7 @@ import { MuseoModerno } from "next/font/google";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { EmojiOpenBtn } from "./EmojiOpenBtn";
+import { UserInfo } from "./UserInfo";
 
 const museoModerno = MuseoModerno({
   weight: "800",
@@ -41,22 +42,11 @@ export async function NavigationBar({
         <div className="block">
           <ul className="flex">
             <li className="mr-6">
-              {/* <LinkWithRoute href="/feedbacker" text="emoji" /> */}
               <EmojiOpenBtn />
             </li>
-            {/* <li className="mr-6">
-              <LinkWithRoute href="/feedbacker" text="장애학생 페이지" />
-            </li>
             <li className="mr-6">
-              <LinkWithRoute href="/notetaker" text="지원인력 페이지" />
+              <UserInfo user={user} />
             </li>
-            <li className="mr-6">
-              {user ? (
-                <UserInfo user={user} />
-              ) : (
-                <LinkWithRoute href="/auth/login" text="로그인" />
-              )}
-            </li> */}
           </ul>
         </div>
       </nav>

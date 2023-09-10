@@ -4,18 +4,25 @@ import {
   User,
   createClientComponentClient,
 } from "@supabase/auth-helpers-nextjs";
-
-export const UserInfo = ({ user }: { user: User }) => {
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+export const UserInfo = ({ user }: { user: User | null }) => {
   const supabase = createClientComponentClient();
+  const router = useRouter();
   return (
     <div
-      className="cursor-pointer text-white hover:text-blue-300"
+      className="tooltip tooltip-bottom"
+      data-tip={user ? `${user.email} / 로그아웃` : "로그인"}
       onClick={async () => {
-        await supabase.auth.signOut();
-        window.location.reload();
+        if (user) {
+          await supabase.auth.signOut();
+          router.refresh();
+        } else {
+          router.push("/auth/login");
+        }
       }}
     >
-      {user.email}
+      <Image src="/user.png" alt="user" width="24" height="24" />
     </div>
   );
 };

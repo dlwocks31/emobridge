@@ -11,5 +11,6 @@ export async function GET(req: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(new URL("/", req.url));
+  // TODO: redirect by user role
+  return NextResponse.redirect(new URL("/feedbacker/course", req.url));
 }
