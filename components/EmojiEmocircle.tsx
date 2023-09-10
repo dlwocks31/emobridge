@@ -147,7 +147,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
     };
   }, []);
   return (
-    <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
+    <div className="absolute bottom-0 right-0 mb-10 flex flex-col items-end">
       {showContainer && (
         <div
           className={`h-100 rounded-3xl ${backgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-2`}

@@ -29,7 +29,7 @@ export function DocShowClient({
   const [editable, setEditable] = useState(false);
 
   return (
-    <div className="w-full flex-grow flex flex-col">
+    <div className="w-full flex-grow flex flex-col relative">
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} userRole={userRole}/> : null}
       </div>
@@ -52,7 +52,7 @@ export function DocShowClient({
           docId={docId}
         />
       </div>
-      <div>
+      <div className="w-full flex justify-end">
         <EmojiEmoCircle docId={docId} userRole={userRole} />
       </div>
     </div>
