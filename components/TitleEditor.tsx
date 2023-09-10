@@ -3,6 +3,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import { Database } from "../database.types";
+import { cn } from "../utils/cn";
 
 export function TitleEditor({
   initialTitle,
@@ -29,6 +30,8 @@ export function TitleEditor({
     }
     setLastSavedTitle(title);
   };
+
+  const hasChange = title !== lastSavedTitle;
   return (
     <div className="flex items-center">
       <input
@@ -37,23 +40,24 @@ export function TitleEditor({
         className="input text-2xl font-bold"
         onChange={(e) => setTitle(e.target.value)}
       />
-      {title !== lastSavedTitle ? (
-        <>
-          <button className="btn ml-2 btn-success" onClick={onSave}>
-            {isLoading ? (
-              <span className="loading loading-spinner"></span>
-            ) : (
-              "저장"
-            )}
-          </button>
-          <button
-            className="btn ml-2 btn-error"
-            onClick={() => setTitle(lastSavedTitle)}
-          >
-            취소
-          </button>
-        </>
-      ) : null}
+      <button
+        className={cn("btn ml-2", {
+          "btn-success": hasChange,
+          "btn-disabled": !hasChange,
+        })}
+        onClick={onSave}
+      >
+        {isLoading ? <span className="loading loading-spinner"></span> : "저장"}
+      </button>
+
+      {hasChange && (
+        <button
+          className="btn ml-2 btn-error"
+          onClick={() => setTitle(lastSavedTitle)}
+        >
+          취소
+        </button>
+      )}
     </div>
   );
 }
