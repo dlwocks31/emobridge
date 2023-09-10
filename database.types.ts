@@ -14,16 +14,19 @@ export interface Database {
           createdAt: string
           id: number
           name: string
+          userEmails: string[]
         }
         Insert: {
           createdAt?: string
           id?: number
           name: string
+          userEmails: string[]
         }
         Update: {
           createdAt?: string
           id?: number
           name?: string
+          userEmails?: string[]
         }
         Relationships: []
       }
@@ -45,6 +48,27 @@ export interface Database {
           createdAt?: string
           id?: number
           name?: string
+        }
+        Relationships: []
+      }
+      userRoles: {
+        Row: {
+          createdAt: string
+          id: number
+          userEmail: string
+          userRole: string
+        }
+        Insert: {
+          createdAt?: string
+          id?: number
+          userEmail: string
+          userRole: string
+        }
+        Update: {
+          createdAt?: string
+          id?: number
+          userEmail?: string
+          userRole?: string
         }
         Relationships: []
       }

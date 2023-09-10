@@ -3,16 +3,24 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
 
-
 export async function CourseIndex({ at }: { at: "editor" | "feedbacker" }) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const { data } = await supabase.from("courses").select("*");
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { data } = await supabase
+    .from("courses")
+    .select("*")
+    .contains("userEmails", [user?.email]);
+
   if (!data) {
-    return <div>Course not found</div>;
+    return <div>수업이 없습니다.</div>;
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-xl font-bold">수업 목록</div>
+      <div className="text-xl font-bold">나의 수업 목록</div>
+      {data.length === 0 && <div>수업이 없습니다.</div>}
       {data.map((c) => (
         <div key={c.id}>
           <Link
