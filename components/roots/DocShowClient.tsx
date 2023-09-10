@@ -3,14 +3,14 @@ import { BlockNoteEditor, Editor } from "@/components/Editor";
 import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { User } from "@supabase/supabase-js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TitleEditor } from "../TitleEditor";
 
 export function DocShowClient({
   user,
   id,
   name,
-  userRole
+  userRole,
 }: {
   user: User | null;
   id: string;
@@ -28,10 +28,35 @@ export function DocShowClient({
 
   const [editable, setEditable] = useState(false);
 
+  async function pasteImage() {
+    try {
+      const permission = await navigator.permissions.query({
+        name: "clipboard-read",
+      });
+      if (permission.state === "denied") {
+        throw new Error("Not allowed to read clipboard.");
+      }
+      console.log(permission.state);
+      const clipboardContents = await navigator.clipboard.read();
+      console.log(clipboardContents);
+      for (const item of clipboardContents) {
+        if (!item.types.includes("image/png")) {
+          continue;
+        }
+        const blob = await item.getType("image/png");
+        console.log("Blob", blob.size, blob.type);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("paste", pasteImage);
+  }, [editor]);
   return (
     <div className="w-full flex-grow flex flex-col relative">
       <div className="w-full flex justify-end">
-        {editor ? <EmojiContainer editor={editor} userRole={userRole}/> : null}
+        {editor ? <EmojiContainer editor={editor} userRole={userRole} /> : null}
       </div>
       <div className="my-4">
         <TitleEditor initialTitle={name} id={id} />
