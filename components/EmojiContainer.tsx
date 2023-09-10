@@ -3,7 +3,6 @@ import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 import Image from "next/image";
 import { useContext } from "react";
 import { GlobalContext } from "../app/providers";
-// const emojis = ["👍", "🤔", "🌟", "👎"]; // Your emoji list
 const emojiList = [
   {
     url: "/important.png",
@@ -44,7 +43,7 @@ const RowInfo = [
   { start: 6, end: 8 },
 ];
 
-export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor }) => {
+export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor; userRole: string }) => {
   const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
   const handleEmojiClick = (emoji: string) => {
     if (!focusedBlockId) return;

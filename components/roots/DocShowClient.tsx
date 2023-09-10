@@ -10,10 +10,12 @@ export function DocShowClient({
   user,
   id,
   name,
+  userRole
 }: {
   user: User | null;
   id: string;
   name: string;
+  userRole: string;
 }) {
   const docId = `course-doc-${id}`;
 
@@ -29,7 +31,7 @@ export function DocShowClient({
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full flex justify-end">
-        {editor ? <EmojiContainer editor={editor} /> : null}
+        {editor ? <EmojiContainer editor={editor} userRole={userRole}/> : null}
       </div>
       <TitleEditor initialTitle={name} id={id} />
       <div className="flex justify-center items-center mt-2">
@@ -51,7 +53,7 @@ export function DocShowClient({
         />
       </div>
       <div>
-        <EmojiEmoCircle docId={docId} />
+        <EmojiEmoCircle docId={docId} userRole={userRole} />
       </div>
     </div>
   );

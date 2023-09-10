@@ -1,5 +1,8 @@
 import { DocShow } from "@/components/roots/DocShow";
 
 export default function Index({ params }: { params: { id: string } }) {
-  return <DocShow id={params.id} />;
+  const userRole = "editor";
+
+  return <DocShow id={params.id} userRole={userRole}/>;
 }
+ 

@@ -54,7 +54,7 @@ const RowInfo = [
   { start: 4, end: 8 },
   { start: 8, end: 10 },
 ];
-export const EmojiEmoCircle = ({ docId }: { docId?: string }) => {
+export const EmojiEmoCircle = ({ docId }: { docId?: string; userRole: string }) => {
   const supabase = createClientComponentClient();
   const [channel] = useState(() =>
     supabase.channel(docId ? `emotion-emoji-${docId}` : "emotion-emoji", {

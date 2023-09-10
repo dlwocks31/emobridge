@@ -3,7 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { DocShowClient } from "./DocShowClient";
 
-export async function DocShow({ id }: { id: string }) {
+export async function DocShow({ id, userRole }: { id: string;  userRole: string }) {
   const supabase = createServerComponentClient<Database>({ cookies });
 
   const { data: document } = await supabase
@@ -16,5 +16,5 @@ export async function DocShow({ id }: { id: string }) {
     return <div>Document not found</div>;
   }
 
-  return <DocShowClient user={null} id={id} name={document.name} />;
+  return <DocShowClient user={null} id={id} name={document.name} userRole={userRole}/>;
 }
