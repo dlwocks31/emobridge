@@ -154,7 +154,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
-          <div className="text-center text-xl mb-1">감정 이모지</div>
+          <div className="text-center text-lg font-bold mb-1">감정 이모지</div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
