@@ -3,48 +3,93 @@ import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 import Image from "next/image";
 import { useContext } from "react";
 import { GlobalContext } from "../app/providers";
-const emojiList = [
+const emojiListF = [
   {
-    url: "/important.png",
+    url: "/importantF.png",
     def: "중요해요",
   },
   {
-    url: "/fix.png",
-    def: "고쳐주세요",
-  },
-  {
-    url: "/more.png",
+    url: "/moreF.png",
     def: "더 자세하게\n써주세요",
   },
   {
-    url: "/ppt.png",
+    url: "/enoughF.png",
+    def: "충분해요",
+  },
+  {
+    url: "/pptF.png",
     def: "PPT대로\n써주세요",
   },
   {
-    url: "/curious.png",
-    def: "궁금해",
+    url: "/photoF.png",
+    def: "사진찍어서\n넣어주세요",
   },
   {
-    url: "/enough.png",
-    def: "충분해",
+    url: "/fixF.png",
+    def: "고쳐주세요",
   },
   {
-    url: "/easy.png",
-    def: "쉬워",
+    url: "/hardF.png",
+    def: "어려워요",
   },
   {
-    url: "/hard.png",
-    def: "어려워",
+    url: "/curiousF.png",
+    def: "제가 맞게\n썼나요?",
+  },
+  {
+    url: "/emptyF.png",
+    def: "잠깐 자리\n비울게요",
+  },
+];
+const emojiListE = [
+  {
+    url: "/importantE.png",
+    def: "중요해요",
+  },
+  {
+    url: "/moreE.png",
+    def: "더 자세하게\n써주세요",
+  },
+  {
+    url: "/enoughE.png",
+    def: "충분해요",
+  },
+  {
+    url: "/pptE.png",
+    def: "PPT대로\n써주세요",
+  },
+  {
+    url: "/photoE.png",
+    def: "사진찍어서\n넣어주세요",
+  },
+  {
+    url: "/fixE.png",
+    def: "고쳐주세요",
+  },
+  {
+    url: "/hardE.png",
+    def: "어려워요",
+  },
+  {
+    url: "/curiousE.png",
+    def: "제가 맞게\n썼나요?",
+  },
+  {
+    url: "/emptyE.png",
+    def: "잠깐 자리\n비울게요",
   },
 ];
 const RowInfo = [
   { start: 0, end: 3 },
   { start: 3, end: 6 },
-  { start: 6, end: 8 },
+  { start: 6, end: 9 },
 ];
 
-export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor; userRole: string }) => {
+export const EmojiContainer = ({ editor, userRole }: { editor: BlockNoteEditor; userRole: string }) => {
   const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
+  const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
+  const containerBackgroundColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
+
   const handleEmojiClick = (emoji: string) => {
     if (!focusedBlockId) return;
     const textCursorPosition = editor.getTextCursorPosition();
@@ -105,8 +150,7 @@ export const EmojiContainer = ({ editor }: { editor: BlockNoteEditor; userRole: 
       {emojiContainerOpened ? (
         <div
           className={
-            "h-100 rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur " +
-            (focusedBlockId ? "opacity-100" : "opacity-100")
+            `h-100 rounded-3xl ${containerBackgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur ${focusedBlockId ? "opacity-100" : "opacity-100"}`
           }
         >
           <div className="text-center text-xl mb-1">필기 이모지</div>
