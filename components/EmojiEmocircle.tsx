@@ -7,55 +7,93 @@ interface Emoji {
   def: string;
 }
 
-const emojiList: Emoji[] = [
+const emojiListF: Emoji[] = [
   {
-    url: "/good.png",
+    url: "/thanksF.png",
+    def: "고마워요",
+  },
+  {
+    url: "/goodF.png",
     def: "좋아요",
   },
   {
-    url: "/bad.png",
-    def: "별로예요",
+    url: "/funnyF.png",
+    def: "웃겨요",
   },
   {
-    url: "/help.png",
-    def: "도와주세요",
+    url: "/concentrateF.png",
+    def: "여기 집중\n해주세요",
   },
   {
-    url: "/fighting.png",
+    url: "/restF.png",
+    def: "잠시\n쉬어가요",
+  },
+  {
+    url: "/fightingF.png",
     def: "화이팅",
   },
   {
-    url: "/sleep.png",
-    def: "졸려요",
+    url: "/nosleepF.png",
+    def: "졸지마요",
   },
   {
-    url: "/nosleep.png",
-    def: "졸지마",
+    url: "/helpF.png",
+    def: "도와주세요",
   },
   {
-    url: "/thanks.png",
-    def: "고마워",
+    url: "/toiletF.png",
+    def: "화장실\n가고 싶어요",
+  },
+];
+const emojiListE: Emoji[] = [
+  {
+    url: "/thanksE.png",
+    def: "고마워요",
   },
   {
-    url: "/funny.png",
-    def: "웃겨",
+    url: "/goodE.png",
+    def: "좋아요",
   },
   {
-    url: "/hungry.png",
-    def: "배고파",
+    url: "/funnyE.png",
+    def: "웃겨요",
   },
   {
-    url: "/toilet.png",
-    def: "화장실\n가고 싶어",
+    url: "/concentrateE.png",
+    def: "여기 집중\n해주세요",
+  },
+  {
+    url: "/restE.png",
+    def: "잠시\n쉬어가요",
+  },
+  {
+    url: "/fightingE.png",
+    def: "화이팅",
+  },
+  {
+    url: "/nosleepE.png",
+    def: "졸지마요",
+  },
+  {
+    url: "/helpE.png",
+    def: "도와주세요",
+  },
+  {
+    url: "/toiletE.png",
+    def: "화장실\n가고 싶어요",
   },
 ];
 const RowInfo = [
-  { start: 0, end: 4 },
-  { start: 4, end: 8 },
-  { start: 8, end: 10 },
+  { start: 0, end: 3 },
+  { start: 3, end: 6 },
+  { start: 6, end: 9 },
 ];
-export const EmojiEmoCircle = ({ docId }: { docId?: string; userRole: string }) => {
+export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: string }) => {
   const supabase = createClientComponentClient();
+  const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
+  const backgroundColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
+  const circleColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-gray-300";
+
   const [channel] = useState(() =>
     supabase.channel(docId ? `emotion-emoji-${docId}` : "emotion-emoji", {
       config: {
@@ -112,7 +150,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string; userRole: string }) 
     <div className="fixed bottom-0 right-0 m-10 flex flex-col items-end">
       {showContainer && (
         <div
-          className="rounded-3xl bg-white/30 p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-2"
+          className={`h-100 rounded-3xl ${backgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-2`}
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
@@ -120,7 +158,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string; userRole: string }) 
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <div className="flex flex-col justify-start items-center w-12 m-1">
+                <div className="flex flex-col justify-start items-center w-16 m-1">
                   <Image
                     src={emoji.url}
                     alt={emoji.def}
@@ -139,7 +177,7 @@ export const EmojiEmoCircle = ({ docId }: { docId?: string; userRole: string }) 
       )}
       <div
         className={
-          "flex h-28 w-28 text-8xl items-center justify-center rounded-full bg-gray-100 flex-shrink-0 border border-gray-300 border-opacity-10" +
+          `flex h-28 w-28 text-8xl items-center justify-center rounded-full ${circleColor} flex-shrink-0 border border-gray-300 border-opacity-10` +
           (showCircle
             ? " ring-2 ring-gray-200 shadow-xl"
             : " transition-opacity duration-200 bg-opacity-50 border-opacity-20")
