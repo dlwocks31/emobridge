@@ -2,8 +2,10 @@
 import { BlockNoteEditor, Editor } from "@/components/Editor";
 import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import { Database } from "../../database.types";
 import { TitleEditor } from "../TitleEditor";
 
 export function DocShowClient({
@@ -21,6 +23,8 @@ export function DocShowClient({
 
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
+  const supabase = createClientComponentClient<Database>();
+
   const handleEditorReady = (editor: BlockNoteEditor | null) => {
     console.log("handleEditorReady");
     setEditor(editor);
@@ -28,15 +32,17 @@ export function DocShowClient({
 
   const [editable, setEditable] = useState(false);
 
-  async function pasteImage() {
+  async function pasteImage(e: ClipboardEvent) {
+    console.log("pasteImage: clipboard event", e);
+    e.preventDefault();
+    // TODO: check if the paste event is in the editor.
+    // Below does not work, not sure why...
+    // const editorElement = document.querySelector(".ProseMirror");
+    // if (!editorElement || !editorElement.contains(e.target as Node)) {
+    //   console.log("pasteImage: not in editor");
+    //   return;
+    // }
     try {
-      const permission = await navigator.permissions.query({
-        name: "clipboard-read",
-      });
-      if (permission.state === "denied") {
-        throw new Error("Not allowed to read clipboard.");
-      }
-      console.log(permission.state);
       const clipboardContents = await navigator.clipboard.read();
       console.log(clipboardContents);
       for (const item of clipboardContents) {
@@ -45,13 +51,25 @@ export function DocShowClient({
         }
         const blob = await item.getType("image/png");
         console.log("Blob", blob.size, blob.type);
+        const { data, error } = await supabase.storage
+          .from("editorFiles")
+          .upload(`${Date.now()}.png`, blob);
+        if (error) {
+          console.log("Error uploading image", error);
+          continue;
+        }
+        console.log("Uploaded image", data);
       }
     } catch (error) {
-      console.error(error.message);
+      alert(`Failed to read clipboard contents: ${error}`);
     }
   }
   useEffect(() => {
     document.addEventListener("paste", pasteImage);
+
+    return () => {
+      document.removeEventListener("paste", pasteImage);
+    };
   }, [editor]);
   return (
     <div className="w-full flex-grow flex flex-col relative">
