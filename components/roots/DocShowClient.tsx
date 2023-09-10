@@ -4,10 +4,10 @@ import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
+import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { Database } from "../../database.types";
 import { TitleEditor } from "../TitleEditor";
-
 export function DocShowClient({
   user,
   id,
@@ -33,8 +33,6 @@ export function DocShowClient({
   const [editable, setEditable] = useState(false);
 
   async function pasteImage(e: ClipboardEvent) {
-    console.log("pasteImage: clipboard event", e);
-    e.preventDefault();
     // TODO: check if the paste event is in the editor.
     // Below does not work, not sure why...
     // const editorElement = document.querySelector(".ProseMirror");
@@ -42,23 +40,40 @@ export function DocShowClient({
     //   console.log("pasteImage: not in editor");
     //   return;
     // }
+
     try {
       const clipboardContents = await navigator.clipboard.read();
-      console.log(clipboardContents);
       for (const item of clipboardContents) {
         if (!item.types.includes("image/png")) {
           continue;
         }
         const blob = await item.getType("image/png");
         console.log("Blob", blob.size, blob.type);
+        const fileName = `${nanoid()}.png`;
+
         const { data, error } = await supabase.storage
           .from("editorFiles")
-          .upload(`${Date.now()}.png`, blob);
+          .upload(fileName, blob);
         if (error) {
           console.log("Error uploading image", error);
           continue;
         }
         console.log("Uploaded image", data);
+        const { data: publicUrlData } = await supabase.storage
+          .from("editorFiles")
+          .getPublicUrl(fileName);
+        editor?.insertBlocks(
+          [
+            {
+              type: "image",
+              props: {
+                src: publicUrlData.publicUrl,
+                alt: "Image",
+              },
+            },
+          ],
+          editor.getTextCursorPosition().block.id,
+        );
       }
     } catch (error) {
       alert(`Failed to read clipboard contents: ${error}`);

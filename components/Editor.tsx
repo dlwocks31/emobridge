@@ -41,6 +41,16 @@ export type MyBlockSchema = BlockSchema & {
       };
     };
   };
+  image: {
+    propSchema: {
+      src: {
+        default: string;
+      };
+      alt: {
+        default: string;
+      };
+    };
+  };
 };
 export type BlockNoteEditor = BlockNoteEditorOriginal<MyBlockSchema>;
 export type PartialBlock = PartialBlockOriginal<MyBlockSchema>;
@@ -140,6 +150,36 @@ export const Editor = ({
     },
     containsInlineContent: false,
     render: () => <div className="hidden"></div>,
+  });
+
+  const ImageBlock = createReactBlockSpec({
+    type: "image",
+    propSchema: {
+      src: {
+        default: "https://via.placeholder.com/1000",
+      },
+      alt: {
+        default: "placeholder",
+      },
+    },
+    containsInlineContent: false,
+    render: ({ block }) => (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <img
+          style={{
+            width: "100%",
+          }}
+          src={block.props.src}
+          alt={"Image"}
+          contentEditable={false}
+        />
+      </div>
+    ),
   });
 
   function updateAllEditorEmojiHeight(editor: BlockNoteEditor) {
@@ -266,6 +306,7 @@ export const Editor = ({
       ...defaultBlockSchema,
       // Adds the custom image block.
       emoji: EmojiBlock,
+      image: ImageBlock,
     },
     onTextCursorPositionChange: (editor: BlockNoteEditor) => {
       const textCursorPosition = editor.getTextCursorPosition();
