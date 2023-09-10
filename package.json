@@ -15,7 +15,7 @@
     "@supabase/supabase-js": "^2.26.0",
     "autoprefixer": "10.4.14",
     "dayjs": "^1.11.9",
-    "next": "^13.4.11",
+    "next": "^13.4.19",
     "partykit": "^0.0.0-fa8d73a",
     "partysocket": "^0.0.0-fa8d73a",
     "postcss": "8.4.24",

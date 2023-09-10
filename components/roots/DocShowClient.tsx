@@ -4,6 +4,7 @@ import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { User } from "@supabase/supabase-js";
 import { useState } from "react";
+import { TitleEditor } from "../TitleEditor";
 
 export function DocShowClient({
   user,
@@ -30,7 +31,7 @@ export function DocShowClient({
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} /> : null}
       </div>
-      <div className="font-bold text-xl">제목: {name}</div>
+      <TitleEditor initialTitle={name} id={id} />
       <div className="flex justify-center items-center mt-2">
         <input
           type="checkbox"
