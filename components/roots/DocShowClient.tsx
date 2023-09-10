@@ -33,7 +33,9 @@ export function DocShowClient({
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} userRole={userRole}/> : null}
       </div>
-      <TitleEditor initialTitle={name} id={id} />
+      <div className="my-4">
+        <TitleEditor initialTitle={name} id={id} />
+      </div>
       <div className="flex justify-center items-center mt-2">
         <input
           type="checkbox"

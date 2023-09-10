@@ -32,15 +32,16 @@ export async function CourseShow({
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-xl font-bold">수업: {course.name}</div>
+      <div className="text-2xl font-bold mt-4">수업: {course.name}</div>
       <div className="flex justify-between items-center">
-        <div className="text-lg font-bold">문서:</div>
+        <div className="text-xl font-bold">문서</div>
         <DocCreate courseId={course.id} />
       </div>
+
       {docs.map((d) => (
         <div key={d.id}>
           <Link
-            className="btn w-full flex justify-between px-4 no-animation"
+            className="btn w-full text-base flex justify-between px-4 no-animation"
             href={`/${at}/doc/${d.id}`}
           >
             <div>{d.name}</div>
