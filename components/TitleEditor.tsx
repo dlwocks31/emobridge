@@ -1,6 +1,7 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Database } from "../database.types";
 import { cn } from "../utils/cn";
@@ -16,6 +17,8 @@ export function TitleEditor({
   const [title, setTitle] = useState(initialTitle);
   const [lastSavedTitle, setLastSavedTitle] = useState(initialTitle);
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+
   const onSave = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -29,6 +32,8 @@ export function TitleEditor({
       return;
     }
     setLastSavedTitle(title);
+
+    router.refresh();
   };
 
   const hasChange = title !== lastSavedTitle;

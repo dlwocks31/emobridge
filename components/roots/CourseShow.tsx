@@ -32,9 +32,21 @@ export async function CourseShow({
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="text-2xl font-bold mt-4">수업: {course.name}</div>
+      <div className="flex gap-1">
+        <Link
+          className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1"
+          href={`/${at}/course`}
+        >
+          나의 수업
+        </Link>{" "}
+        <div>/</div>
+        <div className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1">
+          {course.name}
+        </div>
+      </div>
+
       <div className="flex justify-between items-center">
-        <div className="text-xl font-bold">문서</div>
+        <div className="text-2xl font-bold">{course.name}: 수업 문서</div>
         <DocCreate courseId={course.id} />
       </div>
 
