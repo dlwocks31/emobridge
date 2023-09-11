@@ -5,9 +5,9 @@ import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { nanoid } from "nanoid";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Database } from "../../database.types";
+import { DirectoryNavigation } from "../DirectoryNavigation";
 import { TitleEditor } from "../TitleEditor";
 export function DocShowClient({
   user,
@@ -105,25 +105,16 @@ export function DocShowClient({
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} userRole={userRole} /> : null}
       </div>
-      <div className="px-4 flex gap-1">
-        <Link
-          className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1"
-          href={`/${userRole}/course`}
-        >
-          나의 수업
-        </Link>{" "}
-        <div>/</div>
-        <Link
-          className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1"
-          href={`/${userRole}/course/${course.id}`}
-        >
-          {course.name}
-        </Link>{" "}
-        <div>/</div>
-        <div className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1">
-          {name}
-        </div>
+      <div className="px-4">
+        <DirectoryNavigation
+          directories={[
+            { name: "나의 수업", href: `/${userRole}/course` },
+            { name: course.name, href: `/${userRole}/course/${course.id}` },
+            { name },
+          ]}
+        />
       </div>
+
       <div className="my-2">
         <TitleEditor initialTitle={name} id={id} />
       </div>

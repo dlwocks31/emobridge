@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { DirectoryNavigation } from "../DirectoryNavigation";
 import { DocCreate } from "../DocCreate";
 export async function CourseShow({
   id,
@@ -32,19 +33,12 @@ export async function CourseShow({
   }
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-1">
-        <Link
-          className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1"
-          href={`/${at}/course`}
-        >
-          나의 수업
-        </Link>{" "}
-        <div>/</div>
-        <div className="btn btn-ghost h-[fit-content] min-h-[fit-content] p-1">
-          {course.name}
-        </div>
-      </div>
-
+      <DirectoryNavigation
+        directories={[
+          { name: "나의 수업", href: `/${at}/course` },
+          { name: course.name },
+        ]}
+      />
       <div className="flex justify-between items-center">
         <div className="text-2xl font-bold">{course.name}: 수업 문서</div>
         <DocCreate courseId={course.id} />
