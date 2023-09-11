@@ -30,54 +30,62 @@ export function DocShowClient({
     setEditor(editor);
   };
 
-  const [editable, setEditable] = useState(false);
+  const [editable, setEditable] = useState(true);
 
   async function pasteImage(e: ClipboardEvent) {
-    // TODO: check if the paste event is in the editor.
-    // Below does not work, not sure why...
-    // const editorElement = document.querySelector(".ProseMirror");
-    // if (!editorElement || !editorElement.contains(e.target as Node)) {
-    //   console.log("pasteImage: not in editor");
-    //   return;
-    // }
+    console.log("pasteImage running");
+    const editorElement = document.querySelector(".ProseMirror");
 
-    try {
-      const clipboardContents = await navigator.clipboard.read();
-      for (const item of clipboardContents) {
-        if (!item.types.includes("image/png")) {
-          continue;
-        }
-        const blob = await item.getType("image/png");
-        console.log("Blob", blob.size, blob.type);
-        const fileName = `${nanoid()}.png`;
-
-        const { data, error } = await supabase.storage
-          .from("editorFiles")
-          .upload(fileName, blob);
-        if (error) {
-          console.log("Error uploading image", error);
-          continue;
-        }
-        console.log("Uploaded image", data);
-        const { data: publicUrlData } = await supabase.storage
-          .from("editorFiles")
-          .getPublicUrl(fileName);
-        editor?.insertBlocks(
-          [
-            {
-              type: "image",
-              props: {
-                src: publicUrlData.publicUrl,
-                alt: "Image",
-              },
-            },
-          ],
-          editor.getTextCursorPosition().block.id,
-        );
-      }
-    } catch (error) {
-      alert(`Failed to read clipboard contents: ${error}`);
+    const inEditor =
+      (editorElement && editorElement.contains(e.target as Node)) ||
+      (e.target as HTMLElement)?.nodeName === "BR"; // for some unknown reason, pasting at start of line is not detected as being inside editorElement. This is a workaround
+    if (!inEditor) {
+      console.log("pasteImage: not in editor. target is", e.target);
+      return;
     }
+    const clipboardData = e.clipboardData;
+    if (!clipboardData || !clipboardData.files.length) {
+      console.log("no clipboard data");
+      return;
+    }
+    const file = clipboardData.files[0];
+    console.log("file", file);
+    const supportedFormats = ["image/png", "image/jpeg", "image/gif"];
+    if (!supportedFormats.includes(file.type)) {
+      console.log("not supported format");
+      return;
+    }
+
+    const fileExtension = file.type.split("/")[1];
+    const fileName = `${docId}/${nanoid()}.${fileExtension}`;
+
+    const { data, error } = await supabase.storage
+      .from("editorFiles")
+      .upload(fileName, file);
+
+    if (error) {
+      console.log("Error uploading image", error);
+      return;
+    }
+
+    console.log("supabase upload data", data);
+
+    const { data: publicUrlData } = await supabase.storage
+      .from("editorFiles")
+      .getPublicUrl(fileName);
+
+    editor?.insertBlocks(
+      [
+        {
+          type: "image",
+          props: {
+            src: publicUrlData.publicUrl,
+            alt: `File: ${file.name}`,
+          },
+        },
+      ],
+      editor.getTextCursorPosition().block.id,
+    );
   }
   useEffect(() => {
     document.addEventListener("paste", pasteImage);
