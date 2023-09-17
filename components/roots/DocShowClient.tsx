@@ -105,7 +105,7 @@ export function DocShowClient({
       <div className="w-full flex justify-end">
         {editor ? <EmojiContainer editor={editor} userRole={userRole} /> : null}
       </div>
-      <div className="px-4">
+      <div>
         <DirectoryNavigation
           directories={[
             { name: "나의 수업", href: `/${userRole}/course` },

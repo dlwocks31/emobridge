@@ -42,7 +42,7 @@ export function TitleEditor({
       <input
         type="text"
         value={title}
-        className="input text-2xl font-bold"
+        className="input text-2xl font-bold -ml-4"
         onChange={(e) => setTitle(e.target.value)}
       />
       <button
