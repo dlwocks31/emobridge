@@ -5,9 +5,20 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Database } from "../database.types";
 import { cn } from "../utils/cn";
+import { setSyntheticLeadingComments } from "typescript";
 
 export function DocDelete({ documentId }: { documentId: number }) {
   const supabase = createClientComponentClient<Database>();
+  const [checkBtn, setCheckBtn] = useState("trashcan");
+  const handleOnClick = (img: typeof checkBtn) => {
+    if (img === "trashcan") {
+      setCheckBtn("checkandcross");
+    } else if (img === "check") {
+      deleteDocument();
+    } else if (img === "cross") {
+      setCheckBtn("trashcan");
+    }
+  };
   const router = useRouter();
   const deleteDocument = async () => {
     const { error } = await supabase
@@ -22,8 +33,40 @@ export function DocDelete({ documentId }: { documentId: number }) {
   };
 
   return (
-    <div className="px-4" onClick={deleteDocument}>
-      🗑️
+    <div>
+      {checkBtn === "trashcan" && (
+        <div className={"btn btn-ghost px-1 w-10"}>
+          <img
+            src={"/trashcan.png"}
+            alt="trashcan"
+            onClick={() => handleOnClick("trashcan")}
+            width="36"
+            height="24"
+          />
+        </div>
+      )}
+      {checkBtn === "checkandcross" && (
+        <div className={"flex justify-between items-center"}>
+          <div className={"btn btn-ghost px-1 w-10"}>
+            <img
+              src={"/check.png"}
+              alt="check"
+              onClick={() => handleOnClick("check")}
+              width="36"
+              height="24"
+            />
+          </div>
+          <div className={"btn btn-ghost px-1 w-10"}>
+            <img
+              src={"/cross.png"}
+              alt="cross"
+              onClick={() => handleOnClick("cross")}
+              width="36"
+              height="24"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
