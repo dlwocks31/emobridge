@@ -25,7 +25,7 @@ export function DocShowClient({
     name: string;
   };
 }) {
-  const docId = `course-doc-${id}`;
+  const docCollabKey = `course-doc-${id}`;
 
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
@@ -63,7 +63,7 @@ export function DocShowClient({
     }
 
     const fileExtension = file.type.split("/")[1];
-    const fileName = `${docId}/${nanoid()}.${fileExtension}`;
+    const fileName = `${docCollabKey}/${nanoid()}.${fileExtension}`;
 
     const { data, error } = await supabase.storage
       .from("editorFiles")
@@ -103,7 +103,13 @@ export function DocShowClient({
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full flex justify-end">
-        {editor ? <EmojiContainer editor={editor} userRole={userRole} /> : null}
+        {editor ? (
+          <EmojiContainer
+            editor={editor}
+            userRole={userRole}
+            documentId={+id}
+          />
+        ) : null}
       </div>
       <div>
         <DirectoryNavigation
@@ -133,11 +139,12 @@ export function DocShowClient({
           editable={editable}
           onEditorReady={handleEditorReady}
           userName={user?.user_metadata?.full_name}
-          docId={docId}
+          docCollabKey={docCollabKey}
+          documentId={+id}
         />
       </div>
       <div className="w-full flex justify-end relative">
-        <EmojiEmoCircle docId={docId} userRole={userRole} />
+        <EmojiEmoCircle docId={docCollabKey} userRole={userRole} />
       </div>
     </div>
   );

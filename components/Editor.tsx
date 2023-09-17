@@ -18,6 +18,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import { GlobalContext } from "../app/providers";
+import { insertLog } from "../utils/logs";
 import { Emoji } from "./Emoji";
 
 export type MyBlockSchema = BlockSchema & {
@@ -74,7 +75,8 @@ export const Editor = ({
   onTextCursorPositionChange,
   editable,
   userName,
-  docId,
+  docCollabKey,
+  documentId,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
@@ -85,7 +87,8 @@ export const Editor = ({
   }) => void;
   editable: boolean;
   userName?: string;
-  docId?: string;
+  docCollabKey: string;
+  documentId: number;
 }) => {
   const { setFocusedBlockId: setFocusedBlockIdGlobal } =
     useContext(GlobalContext);
@@ -93,8 +96,7 @@ export const Editor = ({
     const doc = new Y.Doc();
     const provider = new YPartyKitProvider(
       "emobridge.dlwocks31.partykit.dev",
-      // use a unique name as a "room" for your application:
-      docId ? `jaechan-lee-project-${docId}` : "jaechan-lee-project",
+      `jaechan-lee-project-${docCollabKey}`,
       doc,
     );
     return [doc, provider];
@@ -109,7 +111,7 @@ export const Editor = ({
     height: number;
   } | null>(null);
 
-  const removeEmoji = (blockId: string, emojiUrl: string) => {
+  const removeEmoji = async (blockId: string, emojiUrl: string) => {
     const block = editorRef.current?.getBlock(blockId);
     if (!block) return;
     console.log("removeBlocks", block.id, emojiUrl);
@@ -117,6 +119,7 @@ export const Editor = ({
       .split(",")
       .filter((e) => e !== emojiUrl)
       .join(",");
+    const textBlockId = block.props.textBlockId;
     if (newEmoji.length === 0) {
       console.log("textBlockId", block.props.textBlockId);
       const textBlock = editorRef.current?.getBlock(block.props.textBlockId);
@@ -135,6 +138,13 @@ export const Editor = ({
         },
       });
     }
+
+    const { error } = await insertLog({
+      logType: "deleteEmoji",
+      documentId: documentId,
+      emojiType: emojiUrl,
+      targetBlockId: textBlockId,
+    });
   };
 
   const EmojiBlock = createReactBlockSpec({

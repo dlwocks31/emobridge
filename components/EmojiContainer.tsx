@@ -2,8 +2,9 @@
 import { BlockNoteEditor, PartialBlock } from "@/components/Editor";
 import Image from "next/image";
 import { useContext } from "react";
-import { GlobalContext } from "../app/providers";
 import Draggable from "react-draggable";
+import { GlobalContext } from "../app/providers";
+import { insertLog } from "../utils/logs";
 
 const emojiListF = [
   {
@@ -87,12 +88,21 @@ const RowInfo = [
   { start: 6, end: 9 },
 ];
 
-export const EmojiContainer = ({ editor, userRole }: { editor: BlockNoteEditor; userRole: string }) => {
+export const EmojiContainer = ({
+  documentId,
+  editor,
+  userRole,
+}: {
+  documentId: number;
+  editor: BlockNoteEditor;
+  userRole: string;
+}) => {
   const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
   const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
-  const containerBackgroundColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
+  const containerBackgroundColor =
+    userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
 
-  const handleEmojiClick = (emoji: string) => {
+  const handleEmojiClick = async (emoji: string) => {
     if (!focusedBlockId) return;
     const textCursorPosition = editor.getTextCursorPosition();
     if (!textCursorPosition.block.id) return;
@@ -145,6 +155,20 @@ export const EmojiContainer = ({ editor, userRole }: { editor: BlockNoteEditor; 
         props: { backgroundColor: "gray" },
       });
     }
+    const blockId = block?.id;
+    if (blockId) {
+      const { error } = await insertLog({
+        logType: "addEmoji",
+        documentId: documentId,
+        emojiType: emoji,
+        targetBlockId: blockId,
+      });
+      if (error) {
+        console.error("error inserting log", error);
+      }
+    } else {
+      console.error("blockId is undefined");
+    }
   };
 
   return (
@@ -152,11 +176,13 @@ export const EmojiContainer = ({ editor, userRole }: { editor: BlockNoteEditor; 
       <div className="fixed z-50">
         {emojiContainerOpened ? (
           <div
-            className={
-              `h-100 rounded-3xl ${containerBackgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur ${focusedBlockId ? "opacity-100" : "opacity-100"}`
-            }
+            className={`h-100 rounded-3xl ${containerBackgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur ${
+              focusedBlockId ? "opacity-100" : "opacity-100"
+            }`}
           >
-            <div className="text-center text-lg font-bold mb-1">필기 이모지</div>
+            <div className="text-center text-lg font-bold mb-1">
+              필기 이모지
+            </div>
             {RowInfo.map((row, index) => (
               <div className="flex">
                 {emojiList.slice(row.start, row.end).map((emoji, index) => (
