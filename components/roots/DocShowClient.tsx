@@ -1,5 +1,7 @@
 "use client";
 import { BlockNoteEditor, Editor } from "@/components/Editor";
+import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import "@blocknote/core/style.css";
 import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
@@ -9,6 +11,7 @@ import { useEffect, useState } from "react";
 import { Database } from "../../database.types";
 import { DirectoryNavigation } from "../DirectoryNavigation";
 import { TitleEditor } from "../TitleEditor";
+import { DocSave } from "../DocSave";
 export function DocShowClient({
   user,
   id,
@@ -90,7 +93,7 @@ export function DocShowClient({
           },
         },
       ],
-      editor.getTextCursorPosition().block.id,
+      editor.getTextCursorPosition().block.id
     );
   }
   useEffect(() => {
@@ -121,9 +124,13 @@ export function DocShowClient({
         />
       </div>
 
-      <div className="my-2">
-        <TitleEditor initialTitle={name} id={id} />
+      <div className="flex my-2">
+        <div>
+          <TitleEditor initialTitle={name} id={id} />
+        </div>
+        <div>{editor && <DocSave editor={editor} />}</div>
       </div>
+
       <div className="flex justify-center items-center mt-2">
         <input
           type="checkbox"
