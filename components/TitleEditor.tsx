@@ -1,10 +1,10 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Database } from "../database.types";
-import { cn } from "../utils/cn";
 
 export function TitleEditor({
   initialTitle,
@@ -19,24 +19,30 @@ export function TitleEditor({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const onSave = async () => {
-    if (isLoading) return;
+  const saveTitle = async () => {
     setIsLoading(true);
     const { error } = await supabase
       .from("documents")
       .update({ name: title })
       .eq("id", id);
-    setIsLoading(false);
     if (error) {
       console.error(error);
       return;
     }
     setLastSavedTitle(title);
-
     router.refresh();
+    setIsLoading(false);
   };
 
-  const hasChange = title !== lastSavedTitle;
+  const debouncedSaveTitle = debounce(saveTitle, 1000);
+
+  useEffect(() => {
+    if (title !== lastSavedTitle) {
+      debouncedSaveTitle();
+    }
+    return () => debouncedSaveTitle.cancel();
+  }, [title]);
+
   return (
     <div className="flex items-center">
       <input
@@ -45,23 +51,8 @@ export function TitleEditor({
         className="input text-2xl font-bold -ml-4"
         onChange={(e) => setTitle(e.target.value)}
       />
-      <button
-        className={cn("btn ml-2", {
-          "btn-success": hasChange,
-          "btn-disabled": !hasChange,
-        })}
-        onClick={onSave}
-      >
-        {isLoading ? <span className="loading loading-spinner"></span> : "저장"}
-      </button>
-
-      {hasChange && (
-        <button
-          className="btn ml-2 btn-error"
-          onClick={() => setTitle(lastSavedTitle)}
-        >
-          취소
-        </button>
+      {isLoading && (
+        <span className="loading loading-spinner loading-md ml-4"></span>
       )}
     </div>
   );

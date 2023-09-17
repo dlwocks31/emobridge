@@ -16,6 +16,7 @@
     "autoprefixer": "10.4.14",
     "clsx": "^2.0.0",
     "dayjs": "^1.11.9",
+    "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
     "next": "^13.4.19",
     "partykit": "^0.0.0-fa8d73a",
@@ -34,6 +35,7 @@
     "yjs": "^13.6.7"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.198",
     "@types/node": "20.3.1",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.5",
