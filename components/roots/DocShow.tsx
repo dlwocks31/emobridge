@@ -24,13 +24,17 @@ export async function DocShow({
     .eq("id", document?.courseId)
     .single();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!document || !course) {
     return <div>Document not found</div>;
   }
 
   return (
     <DocShowClient
-      user={null}
+      user={user}
       id={id}
       name={document.name}
       course={course}
