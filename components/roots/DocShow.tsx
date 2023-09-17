@@ -16,6 +16,7 @@ export async function DocShow({
     .from("documents")
     .select("*")
     .eq("id", +id)
+    .eq("isHidden", false)
     .single();
 
   const { data: course } = await supabase

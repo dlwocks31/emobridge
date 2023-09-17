@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { DirectoryNavigation } from "../DirectoryNavigation";
 import { DocCreate } from "../DocCreate";
+import { DocDelete } from "../DocDelete";
+
 export async function CourseShow({
   id,
   at,
@@ -27,7 +29,9 @@ export async function CourseShow({
   const { data: docs } = await supabase
     .from("documents")
     .select()
-    .eq("courseId", +id);
+    .eq("courseId", +id)
+    .eq("isHidden", false);
+
   if (!docs) {
     return <div>Document not found</div>;
   }
@@ -45,7 +49,7 @@ export async function CourseShow({
       </div>
 
       {docs.map((d) => (
-        <div key={d.id}>
+        <div key={d.id} className="flex justify-between items-center">
           <Link
             className="btn w-full text-base flex justify-between px-4 no-animation"
             href={`/${at}/doc/${d.id}`}
@@ -53,6 +57,7 @@ export async function CourseShow({
             <div>{d.name}</div>
             <div>{dayjs(d.createdAt).format("YYYY-MM-DD HH:mm:ss")}</div>
           </Link>
+          <DocDelete documentId={d.id} />
         </div>
       ))}
     </div>
