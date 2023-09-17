@@ -35,18 +35,21 @@ export interface Database {
           courseId: number
           createdAt: string
           id: number
+          isHidden: boolean
           name: string
         }
         Insert: {
           courseId: number
           createdAt?: string
           id?: number
+          isHidden?: boolean
           name: string
         }
         Update: {
           courseId?: number
           createdAt?: string
           id?: number
+          isHidden?: boolean
           name?: string
         }
         Relationships: []
