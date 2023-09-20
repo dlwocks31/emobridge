@@ -18,7 +18,7 @@
     "dayjs": "^1.11.9",
     "lodash": "^4.17.21",
     "nanoid": "^4.0.2",
-    "next": "^13.4.19",
+    "next": "^13.5.1",
     "partykit": "^0.0.0-fa8d73a",
     "partysocket": "^0.0.0-fa8d73a",
     "postcss": "8.4.24",
