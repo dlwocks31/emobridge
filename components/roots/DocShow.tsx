@@ -19,18 +19,22 @@ export async function DocShow({
     .eq("isHidden", false)
     .single();
 
+  if (!document) {
+    return <div>Document not found</div>;
+  }
+
   const { data: course } = await supabase
     .from("courses")
     .select("*")
-    .eq("id", document?.courseId)
+    .eq("id", document.courseId)
     .single();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!document || !course) {
-    return <div>Document not found</div>;
+  if (!course) {
+    return <div>Course not found</div>;
   }
 
   return (

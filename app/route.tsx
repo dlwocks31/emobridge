@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export async function GET(request: Request) {
+export function GET(request: Request): never {
   redirect("/feedbacker/course");
 }
