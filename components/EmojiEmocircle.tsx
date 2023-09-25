@@ -1,6 +1,8 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import Draggable from "react-draggable";
+import { useEffect, useRef, useState, useContext } from "react";
+import { GlobalContext } from "../app/providers";
 
 interface Emoji {
   url: string;
@@ -90,6 +92,7 @@ const RowInfo = [
 ];
 export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: string }) => {
   const supabase = createClientComponentClient();
+  const { emoEmojiContainerOpened, setEmoEmojiContainerOpened } = useContext(GlobalContext);
   const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
   const backgroundColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
   const circleColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-gray-300";
@@ -103,7 +106,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
       },
     }),
   );
-  const [showContainer, setShowContainer] = useState(false);
+  //const [showContainer, setShowContainer] = useState(false);
   const [currentEmoji, setCurrentEmoji] = useState<string | null>(null);
   const [currentEmojiAlt, setCurrentEmojiAlt] = useState<string>("");
   const [isEmojiVisible, setIsEmojiVisible] = useState(false);
@@ -124,7 +127,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
         setShowCircle(false);
       }
     }, 5000);
-    setShowContainer(false);
+    setEmoEmojiContainerOpened(false);
     if (option.isLocal) {
       channel.send({
         type: "broadcast",
@@ -148,14 +151,14 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
   }, []);
   return (
     <div className="absolute bottom-0 right-0 mb-10 flex flex-col items-end">
-      {showContainer && (
+      {emoEmojiContainerOpened && (
         <div
           className={`h-100 rounded-3xl ${backgroundColor} p-2 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-3`}
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
           <div className="text-center text-lg font-bold mb-1 m-1">
-            감정 이모지
+            소통 이모지
           </div>
           {RowInfo.map((row, index) => (
             <div className="flex">
@@ -185,7 +188,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
             : " transition-opacity duration-200 bg-opacity-50 border-opacity-20")
         }
         onClick={() => {
-          setShowContainer(!showContainer), setShowCircle(true);
+          setEmoEmojiContainerOpened(!emoEmojiContainerOpened), setShowCircle(true);
         }}
         onMouseOver={() => setShowCircle(true)}
         onMouseLeave={() => setShowCircle(false)}

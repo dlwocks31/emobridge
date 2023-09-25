@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { DocSave } from "./DocSave";
 import { EmojiOpenBtn } from "./EmojiOpenBtn";
+import { EmoEmojiOpenBtn } from "./EmoEmojiOpenBtn";
 import { UserInfo } from "./UserInfo";
 
 const museoModerno = MuseoModerno({
@@ -48,6 +49,9 @@ export async function NavigationBar({
           </Link>
         </div>
         <div className="flex items-center">
+          <div className="mr-6">
+            <EmoEmojiOpenBtn />
+          </div>
           <div className="mr-6">
             <DocSave />
           </div>

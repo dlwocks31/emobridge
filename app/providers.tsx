@@ -9,6 +9,8 @@ interface IGlobalContext {
   setFocusedBlockId: Dispatch<SetStateAction<string | null>>;
   editor: BlockNoteEditor | null;
   setEditor: Dispatch<SetStateAction<BlockNoteEditor | null>>;
+  emoEmojiContainerOpened: boolean;
+  setEmoEmojiContainerOpened: Dispatch<SetStateAction<boolean>>;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -18,12 +20,15 @@ export const GlobalContext = createContext<IGlobalContext>({
   setFocusedBlockId: () => {},
   editor: null,
   setEditor: () => {},
+  emoEmojiContainerOpened: false,
+  setEmoEmojiContainerOpened: () => {},
 });
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [emojiContainerOpened, setEmojiContainerOpened] = useState(true);
   const [focusedBlockId, setFocusedBlockId] = useState<string | null>(null);
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
+  const [emoEmojiContainerOpened, setEmoEmojiContainerOpened] = useState(true);
   const value = {
     emojiContainerOpened,
     setEmojiContainerOpened,
@@ -31,6 +36,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
     setFocusedBlockId,
     editor,
     setEditor,
+    emoEmojiContainerOpened,
+    setEmoEmojiContainerOpened,
   };
   return (
     <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
