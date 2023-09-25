@@ -173,7 +173,7 @@ export const EmojiContainer = ({
 
   return (
     <Draggable
-      defaultPosition={{x:0, y:104}}>
+      defaultPosition={{x:0, y:105}}>
       <div className="fixed z-50">
         {emojiContainerOpened ? (
           <div
