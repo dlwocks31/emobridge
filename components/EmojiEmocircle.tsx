@@ -158,7 +158,7 @@ export const EmojiEmoCircle = ({
     };
   }, []);
   return (
-    <div className="absolute bottom-0 right-0 mb-10 flex flex-col items-end">
+    <div className="fixed bottom-0 right-0 mb-10 mr-10 flex flex-col items-end">
       {emoEmojiContainerOpened && (
         <div
           className={`h-100 rounded-3xl ${backgroundColor} p-2 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur mb-3`}
