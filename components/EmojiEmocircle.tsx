@@ -1,7 +1,6 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
-import Draggable from "react-draggable";
-import { useEffect, useRef, useState, useContext } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { GlobalContext } from "../app/providers";
 
 interface Emoji {
@@ -90,12 +89,21 @@ const RowInfo = [
   { start: 3, end: 6 },
   { start: 6, end: 9 },
 ];
-export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: string }) => {
+export const EmojiEmoCircle = ({
+  docId,
+  userRole,
+}: {
+  docId?: string;
+  userRole: string;
+}) => {
   const supabase = createClientComponentClient();
-  const { emoEmojiContainerOpened, setEmoEmojiContainerOpened } = useContext(GlobalContext);
+  const { emoEmojiContainerOpened, setEmoEmojiContainerOpened } =
+    useContext(GlobalContext);
   const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
-  const backgroundColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
-  const circleColor = userRole === "feedbacker" ? "bg-yellow-300" : "bg-gray-300";
+  const backgroundColor =
+    userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
+  const circleColor =
+    userRole === "feedbacker" ? "bg-yellow-300" : "bg-gray-300";
 
   const [channel] = useState(() =>
     supabase.channel(docId ? `emotion-emoji-${docId}` : "emotion-emoji", {
@@ -188,7 +196,8 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
             : " transition-opacity duration-200 bg-opacity-50 border-opacity-20")
         }
         onClick={() => {
-          setEmoEmojiContainerOpened(!emoEmojiContainerOpened), setShowCircle(true);
+          setEmoEmojiContainerOpened(!emoEmojiContainerOpened),
+            setShowCircle(true);
         }}
         onMouseOver={() => setShowCircle(true)}
         onMouseLeave={() => setShowCircle(false)}
