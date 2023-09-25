@@ -37,7 +37,7 @@ export function DocDelete({ documentId }: { documentId: number }) {
       {checkBtn === "trashcan" && (
         <div className={"btn btn-ghost px-1 w-10"}>
           <img
-            src={"/trashcan.png"}
+            src={"/trashcanNew.png"}
             alt="trashcan"
             onClick={() => handleOnClick("trashcan")}
             width="36"
@@ -49,7 +49,7 @@ export function DocDelete({ documentId }: { documentId: number }) {
         <div className={"flex justify-between items-center"}>
           <div className={"btn btn-ghost px-1 w-10"}>
             <img
-              src={"/check.png"}
+              src={"/checkNew.png"}
               alt="check"
               onClick={() => handleOnClick("check")}
               width="36"
@@ -58,7 +58,7 @@ export function DocDelete({ documentId }: { documentId: number }) {
           </div>
           <div className={"btn btn-ghost px-1 w-10"}>
             <img
-              src={"/cross.png"}
+              src={"/crossNew.png"}
               alt="cross"
               onClick={() => handleOnClick("cross")}
               width="36"
