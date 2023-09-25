@@ -32,6 +32,13 @@ export async function NavigationBar({
           color
         }
       >
+        <div className="block">
+          <ul className="flex">
+            <li className="mr-6">
+              <EmojiOpenBtn />
+            </li>
+          </ul>
+        </div>
         <div className="flex items-center mr-6">
           <Link href={`/${to}/course`}>
             <span className={"font-semibold text-xl " + museoModerno.className}>
@@ -41,9 +48,6 @@ export async function NavigationBar({
         </div>
         <div className="block">
           <ul className="flex">
-            <li className="mr-6">
-              <EmojiOpenBtn />
-            </li>
             <li className="mr-6">
               <UserInfo user={user} />
             </li>
