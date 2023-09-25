@@ -172,7 +172,8 @@ export const EmojiContainer = ({
   };
 
   return (
-    <Draggable>
+    <Draggable
+      defaultPosition={{x:0, y:104}}>
       <div className="fixed z-50">
         {emojiContainerOpened ? (
           <div
@@ -180,7 +181,7 @@ export const EmojiContainer = ({
               focusedBlockId ? "opacity-100" : "opacity-100"
             }`}
           >
-            <div className="text-center text-sm font-bold mb-1">
+            <div className="text-center text-lg font-bold mb-1 m-1">
               필기 이모지
             </div>
             {RowInfo.map((row, index) => (

@@ -154,19 +154,21 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
           onMouseOver={() => setShowCircle(true)}
           onMouseLeave={() => setShowCircle(false)}
         >
-          <div className="text-center text-sm font-bold mb-1">감정 이모지</div>
+          <div className="text-center text-lg font-bold mb-1 m-1">
+            감정 이모지
+          </div>
           {RowInfo.map((row, index) => (
             <div className="flex">
               {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                <div className="flex flex-col justify-start items-center w-16 m-1">
+                <div className="flex flex-col justify-start items-center w-14 m-1">
                   <Image
                     src={emoji.url}
                     alt={emoji.def}
-                    width="50"
-                    height="50"
+                    width="44"
+                    height="44"
                     onClick={() => handleEmojiClick(emoji, { isLocal: true })}
                   />
-                  <div className="text-xs w-16 font-normal text-center whitespace-pre-wrap ter mt-1">
+                  <div className="text-xs w-16 text-center whitespace-pre-wrap mt-1">
                     {emoji.def}
                   </div>
                 </div>

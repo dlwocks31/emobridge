@@ -102,7 +102,7 @@ export function DocShowClient({
   }, [editor]);
   return (
     <div className="w-full flex-grow flex flex-col">
-      <div className="w-full flex justify-end">
+      <div className="w-full flex">
         {editor ? (
           <EmojiContainer
             editor={editor}
