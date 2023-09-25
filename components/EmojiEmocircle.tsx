@@ -123,7 +123,7 @@ export const EmojiEmoCircle = ({ docId, userRole }: { docId?: string; userRole: 
         setIsEmojiVisible(false);
         setShowCircle(false);
       }
-    }, 2000);
+    }, 5000);
     setShowContainer(false);
     if (option.isLocal) {
       channel.send({
