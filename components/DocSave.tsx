@@ -16,7 +16,7 @@ export function DocSave() {
           block.children = removeEmojiBlocks(block.children);
         }
         acc.push(block);
-      } else if (block.type !== "emoji") {
+      } else if (block.type !== "emoji" && block.type !== "image") {
         if (block.children) {
           block.children = removeEmojiBlocks(block.children);
         }
