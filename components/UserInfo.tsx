@@ -11,10 +11,10 @@ export const UserInfo = ({ user }: { user: User | null }) => {
   const router = useRouter();
   if (user) {
     return (
-      <div className="dropdown dropdown-bottom dropdown-end dropdown-hover">
+      <div className="dropdown dropdown-bottom dropdown-end btn btn-ghost px-1 flex items-center">
         <ul
           tabIndex={0}
-          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box"
         >
           <li>
             <a>{user.email}</a>
@@ -36,8 +36,7 @@ export const UserInfo = ({ user }: { user: User | null }) => {
   } else {
     return (
       <div
-        className="tooltip tooltip-bottom"
-        data-tip="로그인"
+        className="btn btn-ghost px-1"
         onClick={() => router.push("/auth/login")}
       >
         <Image src="/user.png" alt="user" width="24" height="24" />

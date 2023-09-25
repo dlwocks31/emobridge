@@ -90,8 +90,10 @@ export const Editor = ({
   docCollabKey: string;
   documentId: number;
 }) => {
-  const { setFocusedBlockId: setFocusedBlockIdGlobal } =
-    useContext(GlobalContext);
+  const {
+    setFocusedBlockId: setFocusedBlockIdGlobal,
+    setEditor: setEditorGlobal,
+  } = useContext(GlobalContext);
   const [doc, provider] = useMemo(() => {
     const doc = new Y.Doc();
     const provider = new YPartyKitProvider(
@@ -337,6 +339,7 @@ export const Editor = ({
       if (onEditorReady) {
         onEditorReady(editor);
       }
+      setEditorGlobal(editor);
     },
   });
 

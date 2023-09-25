@@ -2,6 +2,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { MuseoModerno } from "next/font/google";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { DocSave } from "./DocSave";
 import { EmojiOpenBtn } from "./EmojiOpenBtn";
 import { UserInfo } from "./UserInfo";
 
@@ -46,12 +47,13 @@ export async function NavigationBar({
             </span>
           </Link>
         </div>
-        <div className="block">
-          <ul className="flex">
-            <li className="mr-6">
-              <UserInfo user={user} />
-            </li>
-          </ul>
+        <div className="flex items-center">
+          <div className="mr-6">
+            <DocSave />
+          </div>
+          <div className="mr-6">
+            <UserInfo user={user} />
+          </div>
         </div>
       </nav>
     </>
