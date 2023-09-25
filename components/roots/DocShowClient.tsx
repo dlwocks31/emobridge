@@ -124,7 +124,7 @@ export function DocShowClient({
       <div className="my-2">
         <TitleEditor initialTitle={name} id={id} />
       </div>
-      <div className="flex justify-center items-center mt-2">
+      {/* <div className="flex justify-center items-center mt-2">
         <input
           type="checkbox"
           id="checkbox"
@@ -133,8 +133,8 @@ export function DocShowClient({
           className="h-5 w-5 mr-2"
         />
         <label htmlFor="checkbox">편집 활성화</label>
-      </div>
-      <div className="py-4 flex-grow flex flex-col">
+      </div> */}
+      <div className="py-4 px-56 flex-grow flex flex-col">
         <Editor
           editable={editable}
           onEditorReady={handleEditorReady}

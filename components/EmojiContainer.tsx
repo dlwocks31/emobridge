@@ -176,28 +176,28 @@ export const EmojiContainer = ({
       <div className="fixed z-50">
         {emojiContainerOpened ? (
           <div
-            className={`h-100 rounded-3xl ${containerBackgroundColor} p-4 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur ${
+            className={`h-100 rounded-3xl ${containerBackgroundColor} p-2 border-black border-opacity-10 shadow-xl ring-2 ring-gray-200 bg-opacity-30 backdrop-filter backdrop-blur ${
               focusedBlockId ? "opacity-100" : "opacity-100"
             }`}
           >
-            <div className="text-center text-lg font-bold mb-1">
+            <div className="text-center text-sm font-bold mb-1">
               필기 이모지
             </div>
             {RowInfo.map((row, index) => (
               <div className="flex">
                 {emojiList.slice(row.start, row.end).map((emoji, index) => (
-                  <div className="flex flex-col justify-start items-center w-16 m-1">
+                  <div className="flex flex-col justify-start items-center w-14 m-1">
                     <Image
                       src={emoji.url}
                       alt={emoji.def}
-                      width="50"
-                      height="50"
+                      width="44"
+                      height="44"
                       onClick={() => {
                         console.log(emoji.url);
                         handleEmojiClick(emoji.url);
                       }}
                     />
-                    <div className="text-xs w-20 text-center whitespace-pre-wrap mt-1">
+                    <div className="text-xs w-16 text-center whitespace-pre-wrap mt-1">
                       {emoji.def}
                     </div>
                   </div>
