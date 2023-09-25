@@ -32,10 +32,10 @@ export function DocSave() {
       const cleanedBlocks = removeEmojiBlocks(originalBlocks); // "emoji" 블록들을 제거합니다.
       const htmlContent = await editor!.blocksToMarkdown(cleanedBlocks); // 새로운 블록 리스트로 마크다운을 생성합니다.
 
-      const blob = new Blob([htmlContent], { type: "text/markdown" });
+      const blob = new Blob([htmlContent], { type: "text/plain" });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download = "content.md";
+      link.download = "content.txt";
       link.click();
     } catch (error) {
       console.error("Error generating html:", error);
