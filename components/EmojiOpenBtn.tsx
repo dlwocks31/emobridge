@@ -27,7 +27,7 @@ export const EmojiOpenBtn = () => {
   };
   return (
     <div onClick={onClickEmojiOpen}>
-      <img src={emojiContainerOpened ? "/starLight.png" : "/star.png"} alt="필기이모지 버튼" width="24" height="24"></img>
+      <img src={emojiContainerOpened ? "/writeLight.png" : "/write.png"} alt="필기이모지 버튼" width="24" height="24"></img>
     </div>
   );
 };
