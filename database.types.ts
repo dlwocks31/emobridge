@@ -56,31 +56,37 @@ export interface Database {
       }
       editorLogs: {
         Row: {
+          blockContent: string | null
           createdAt: string
           createdBy: string
           documentId: number
+          emojiClass: string
           emojiType: string | null
           id: number
           logType: string
-          targetBlockId: string
+          targetBlockId: string | null
         }
         Insert: {
+          blockContent?: string | null
           createdAt?: string
           createdBy?: string
           documentId: number
+          emojiClass: string
           emojiType?: string | null
           id?: number
           logType: string
-          targetBlockId: string
+          targetBlockId?: string | null
         }
         Update: {
+          blockContent?: string | null
           createdAt?: string
           createdBy?: string
           documentId?: number
+          emojiClass?: string
           emojiType?: string | null
           id?: number
           logType?: string
-          targetBlockId?: string
+          targetBlockId?: string | null
         }
         Relationships: []
       }

@@ -4,84 +4,12 @@ import Image from "next/image";
 import { useContext } from "react";
 import Draggable from "react-draggable";
 import { GlobalContext } from "../app/providers";
-import { insertLog } from "../utils/logs";
+import {
+  notetakingEditorEmojis,
+  notetakingFeedbackerEmojis,
+} from "../utils/emojis";
+import { getText, insertLog } from "../utils/logs";
 
-const emojiListF = [
-  {
-    url: "/importantF.png",
-    def: "중요해요",
-  },
-  {
-    url: "/moreF.png",
-    def: "더 자세하게\n써주세요",
-  },
-  {
-    url: "/enoughF.png",
-    def: "충분해요",
-  },
-  {
-    url: "/pptF.png",
-    def: "PPT대로\n써주세요",
-  },
-  {
-    url: "/photoF.png",
-    def: "사진찍어서\n넣어주세요",
-  },
-  {
-    url: "/fixF.png",
-    def: "고쳐주세요",
-  },
-  {
-    url: "/hardF.png",
-    def: "어려워요",
-  },
-  {
-    url: "/curiousF.png",
-    def: "제가 맞게\n썼나요?",
-  },
-  {
-    url: "/emptyF.png",
-    def: "잠깐 자리\n비울게요",
-  },
-];
-const emojiListE = [
-  {
-    url: "/importantE.png",
-    def: "중요해요",
-  },
-  {
-    url: "/moreE.png",
-    def: "더 자세하게\n써주세요",
-  },
-  {
-    url: "/enoughE.png",
-    def: "충분해요",
-  },
-  {
-    url: "/pptE.png",
-    def: "PPT대로\n써주세요",
-  },
-  {
-    url: "/photoE.png",
-    def: "사진찍어서\n넣어주세요",
-  },
-  {
-    url: "/fixE.png",
-    def: "고쳐주세요",
-  },
-  {
-    url: "/hardE.png",
-    def: "어려워요",
-  },
-  {
-    url: "/curiousE.png",
-    def: "제가 맞게\n썼나요?",
-  },
-  {
-    url: "/emptyE.png",
-    def: "잠깐 자리\n비울게요",
-  },
-];
 const RowInfo = [
   { start: 0, end: 3 },
   { start: 3, end: 6 },
@@ -98,7 +26,10 @@ export const EmojiContainer = ({
   userRole: string;
 }) => {
   const { emojiContainerOpened, focusedBlockId } = useContext(GlobalContext);
-  const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
+  const emojiList =
+    userRole === "feedbacker"
+      ? notetakingFeedbackerEmojis
+      : notetakingEditorEmojis;
   const containerBackgroundColor =
     userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
 
@@ -162,6 +93,7 @@ export const EmojiContainer = ({
         documentId: documentId,
         emojiType: emoji,
         targetBlockId: blockId,
+        blockContent: getText(block.content),
       });
       if (error) {
         console.error("error inserting log", error);
@@ -172,8 +104,7 @@ export const EmojiContainer = ({
   };
 
   return (
-    <Draggable
-      defaultPosition={{x:0, y:105}}>
+    <Draggable defaultPosition={{ x: 0, y: 105 }}>
       <div className="fixed z-50">
         {emojiContainerOpened ? (
           <div

@@ -144,7 +144,11 @@ export function DocShowClient({
         />
       </div>
       <div className="w-full flex justify-end relative">
-        <EmojiEmoCircle docId={docCollabKey} userRole={userRole} />
+        <EmojiEmoCircle
+          docCollabKey={docCollabKey}
+          userRole={userRole}
+          documentId={+id}
+        />
       </div>
     </div>
   );

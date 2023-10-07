@@ -2,111 +2,39 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import { GlobalContext } from "../app/providers";
+import {
+  Emoji,
+  emotionEditorEmojis,
+  emotionFeedbackerEmojis,
+} from "../utils/emojis";
+import { insertLog } from "../utils/logs";
 
-interface Emoji {
-  url: string;
-  def: string;
-}
-
-const emojiListF: Emoji[] = [
-  {
-    url: "/thanksF.png",
-    def: "고마워요",
-  },
-  {
-    url: "/goodF.png",
-    def: "좋아요",
-  },
-  {
-    url: "/funnyF.png",
-    def: "웃겨요",
-  },
-  {
-    url: "/concentrateF.png",
-    def: "여기 집중\n해주세요",
-  },
-  {
-    url: "/restF.png",
-    def: "잠시\n쉬어가요",
-  },
-  {
-    url: "/fightingF.png",
-    def: "화이팅",
-  },
-  {
-    url: "/nosleepF.png",
-    def: "졸지마요",
-  },
-  {
-    url: "/helpF.png",
-    def: "도와주세요",
-  },
-  {
-    url: "/toiletF.png",
-    def: "화장실\n가고 싶어요",
-  },
-];
-const emojiListE: Emoji[] = [
-  {
-    url: "/thanksE.png",
-    def: "고마워요",
-  },
-  {
-    url: "/goodE.png",
-    def: "좋아요",
-  },
-  {
-    url: "/funnyE.png",
-    def: "웃겨요",
-  },
-  {
-    url: "/concentrateE.png",
-    def: "여기 집중\n해주세요",
-  },
-  {
-    url: "/restE.png",
-    def: "잠시\n쉬어가요",
-  },
-  {
-    url: "/fightingE.png",
-    def: "화이팅",
-  },
-  {
-    url: "/nosleepE.png",
-    def: "졸지마요",
-  },
-  {
-    url: "/helpE.png",
-    def: "도와주세요",
-  },
-  {
-    url: "/toiletE.png",
-    def: "화장실\n가고 싶어요",
-  },
-];
 const RowInfo = [
   { start: 0, end: 3 },
   { start: 3, end: 6 },
   { start: 6, end: 9 },
 ];
 export const EmojiEmoCircle = ({
-  docId,
+  docCollabKey,
   userRole,
+  documentId,
 }: {
-  docId?: string;
+  docCollabKey: string;
   userRole: string;
+  documentId: number;
 }) => {
   const supabase = createClientComponentClient();
   const { emoEmojiContainerOpened, setEmoEmojiContainerOpened } =
     useContext(GlobalContext);
-  const emojiList = userRole === "feedbacker" ? emojiListF : emojiListE;
+  const emojiList =
+    userRole === "feedbacker" ? emotionFeedbackerEmojis : emotionEditorEmojis;
   const backgroundColor =
     userRole === "feedbacker" ? "bg-yellow-300" : "bg-white/30";
   const circleColor =
     userRole === "feedbacker" ? "bg-yellow-300" : "bg-gray-300";
 
   const [channel] = useState(() =>
-    supabase.channel(docId ? `emotion-emoji-${docId}` : "emotion-emoji", {
+    supabase.channel(`emotion-emoji-${docCollabKey}`, {
       config: {
         broadcast: {
           self: false,
@@ -136,11 +64,17 @@ export const EmojiEmoCircle = ({
       }
     }, 5000);
     setEmoEmojiContainerOpened(false);
+    console.log("in handleEmojiClick:", option);
     if (option.isLocal) {
       channel.send({
         type: "broadcast",
         event: "click",
         payload: { emoji },
+      });
+      insertLog({
+        logType: "addEmoji",
+        documentId,
+        emojiType: emoji.url,
       });
     }
   };

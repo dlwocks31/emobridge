@@ -18,7 +18,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import YPartyKitProvider from "y-partykit/provider";
 import * as Y from "yjs";
 import { GlobalContext } from "../app/providers";
-import { insertLog } from "../utils/logs";
+import { getText, insertLog } from "../utils/logs";
 import { Emoji } from "./Emoji";
 
 export type MyBlockSchema = BlockSchema & {
@@ -140,12 +140,14 @@ export const Editor = ({
         },
       });
     }
+    const textBlock = editorRef.current?.getBlock(block.props.textBlockId);
 
     const { error } = await insertLog({
       logType: "deleteEmoji",
       documentId: documentId,
       emojiType: emojiUrl,
       targetBlockId: textBlockId,
+      blockContent: textBlock ? getText(textBlock.content) : "",
     });
   };
 
