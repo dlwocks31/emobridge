@@ -68,6 +68,13 @@ export const EmojiContainer = ({
         editor?.updateBlock(block, {
           props: { backgroundColor: "gray" },
         });
+        const { error } = await insertLog({
+          logType: "addEmoji",
+          documentId: documentId,
+          emojiType: emoji,
+          targetBlockId: block.id,
+          blockContent: getText(block.content),
+        });
       }
       return;
     } else if (block) {
