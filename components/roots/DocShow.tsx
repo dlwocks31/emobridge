@@ -1,6 +1,7 @@
 import { Database } from "@/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { notFound, redirect } from "next/navigation";
 import { DocShowClient } from "./DocShowClient";
 
 export async function DocShow({
@@ -11,7 +12,13 @@ export async function DocShow({
   userRole: string;
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
+  if (!user) {
+    redirect("/auth/login");
+  }
   const { data: document } = await supabase
     .from("documents")
     .select("*")
@@ -20,7 +27,7 @@ export async function DocShow({
     .single();
 
   if (!document) {
-    return <div>Document not found</div>;
+    notFound();
   }
 
   const { data: course } = await supabase
@@ -29,12 +36,8 @@ export async function DocShow({
     .eq("id", document.courseId)
     .single();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!course) {
-    return <div>Course not found</div>;
+  if (!course || !user.email || course.userEmails.indexOf(user.email) === -1) {
+    notFound();
   }
 
   return (

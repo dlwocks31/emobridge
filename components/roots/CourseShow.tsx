@@ -3,6 +3,7 @@ import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import { notFound, redirect } from "next/navigation";
 import { DirectoryNavigation } from "../DirectoryNavigation";
 import { DocCreate } from "../DocCreate";
 import { DocDelete } from "../DocDelete";
@@ -16,24 +17,31 @@ export async function CourseShow({
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/auth/login");
+  }
   const { data: course } = await supabase
     .from("courses")
     .select("*")
     .eq("id", +id)
     .single();
-
-  if (!course) {
-    return <div>Class not found</div>;
+  if (!course || !user.email || course.userEmails.indexOf(user.email) === -1) {
+    notFound();
   }
 
-  const { data: docs } = await supabase
+  const { data: docs, error } = await supabase
     .from("documents")
     .select()
     .eq("courseId", +id)
     .eq("isHidden", false);
 
-  if (!docs) {
-    return <div>Document not found</div>;
+  if (error) {
+    console.error(error);
+    throw error;
   }
   return (
     <div className="flex flex-col gap-2">

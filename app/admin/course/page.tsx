@@ -1,6 +1,7 @@
 import { Database } from "@/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
+import { notFound } from "next/navigation";
 import { CourseAccessEdit } from "./CourseAccessEdit";
 export default async function Index() {
   const supabase = createServerComponentClient<Database>(
@@ -10,6 +11,22 @@ export default async function Index() {
       supabaseKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
     },
   );
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const authorizedUserEmails = [
+    "jessicashin1024@gmail.com",
+    "rotto95@snu.ac.kr",
+    "snujiin@snu.ac.kr",
+    "ded06031@snu.ac.kr",
+    "dlwocks31@gmail.com",
+  ];
+
+  if (!user?.email || authorizedUserEmails.indexOf(user.email) === -1) {
+    notFound();
+  }
+
   const { data: courses } = await supabase
     .from("courses")
     .select("*")
