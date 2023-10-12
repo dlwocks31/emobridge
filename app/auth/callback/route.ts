@@ -6,11 +6,11 @@ export async function GET(req: NextRequest) {
   const supabase = createRouteHandlerClient({ cookies });
   const { searchParams } = new URL(req.url);
   const code = searchParams.get("code");
-
+  console.log("code", code);
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
+    const response = await supabase.auth.exchangeCodeForSession(code);
+    console.log("response", response);
   }
 
-  // TODO: redirect by user role
   return NextResponse.redirect(new URL("/feedbacker/course", req.url));
 }
