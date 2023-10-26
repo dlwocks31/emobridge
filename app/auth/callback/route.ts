@@ -1,16 +1,22 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-  const supabase = createRouteHandlerClient({ cookies });
-  const { searchParams } = new URL(req.url);
-  const code = searchParams.get("code");
+import type { NextRequest } from "next/server";
+import { Database } from "../../../database.types";
+// Reference: https://supabase.com/docs/guides/auth/auth-helpers/nextjs?language=ts
+export async function GET(request: NextRequest) {
+  const requestUrl = new URL(request.url);
+  const code = requestUrl.searchParams.get("code");
   console.log("code", code);
   if (code) {
-    const response = await supabase.auth.exchangeCodeForSession(code);
-    console.log("response", response);
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient<Database>({
+      cookies: () => cookieStore,
+    });
+    await supabase.auth.exchangeCodeForSession(code);
   }
 
-  return NextResponse.redirect(new URL("/feedbacker/course", req.url));
+  // URL to redirect to after sign in process completes
+  return NextResponse.redirect(requestUrl.origin);
 }
