@@ -1,18 +1,19 @@
 import { Database } from "@/database.types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  User,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-export async function CourseIndex({ at }: { at: "editor" | "feedbacker" }) {
+export async function CourseIndex({
+  at,
+  user,
+}: {
+  at: "editor" | "feedbacker";
+  user: User;
+}) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  // TODO should I just redirect??
-  if (!user) {
-    redirect("/auth/login");
-  }
 
   const { data } = await supabase
     .from("courses")

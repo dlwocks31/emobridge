@@ -1,24 +1,23 @@
 import { Database } from "@/database.types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  User,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { DocShowClient } from "./DocShowClient";
 
 export async function DocShow({
   id,
   userRole,
+  user,
 }: {
   id: string;
   userRole: string;
+  user: User;
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/auth/login");
-  }
   const { data: document } = await supabase
     .from("documents")
     .select("*")

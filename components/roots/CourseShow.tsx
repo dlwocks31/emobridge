@@ -1,9 +1,12 @@
 import { Database } from "@/database.types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import {
+  User,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
 import dayjs from "dayjs";
 import { cookies } from "next/headers";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { DirectoryNavigation } from "../DirectoryNavigation";
 import { DocCreate } from "../DocCreate";
 import { DocDelete } from "../DocDelete";
@@ -11,19 +14,14 @@ import { DocDelete } from "../DocDelete";
 export async function CourseShow({
   id,
   at,
+  user,
 }: {
   id: string;
   at: "feedbacker" | "editor";
+  user: User;
 }) {
   const supabase = createServerComponentClient<Database>({ cookies });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/auth/login");
-  }
   const { data: course } = await supabase
     .from("courses")
     .select("*")

@@ -3,8 +3,8 @@ import { MuseoModerno } from "next/font/google";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { DocSave } from "./DocSave";
-import { EmojiOpenBtn } from "./EmojiOpenBtn";
 import { EmoEmojiOpenBtn } from "./EmoEmojiOpenBtn";
+import { EmojiOpenBtn } from "./EmojiOpenBtn";
 import { UserInfo } from "./UserInfo";
 
 const museoModerno = MuseoModerno({
@@ -25,7 +25,6 @@ export async function NavigationBar({
     data: { user },
   } = await supabase.auth.getUser();
 
-  console.log(user);
   return (
     <>
       <nav
