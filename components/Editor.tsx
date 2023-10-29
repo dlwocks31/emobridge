@@ -222,7 +222,8 @@ export const Editor = ({
     });
     setEditorEmojiStatus(newEditorEmojiStatus);
     if (emojiBlocksToRemove.length > 0) {
-      editor.removeBlocks(emojiBlocksToRemove);
+      console.log("XXX removeBlocks 2", emojiBlocksToRemove);
+      // editor.removeBlocks(emojiBlocksToRemove);
     }
   }
 
