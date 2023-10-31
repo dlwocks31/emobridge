@@ -9,6 +9,30 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      backups: {
+        Row: {
+          content: string | null
+          createdAt: string
+          createdBy: string | null
+          documentId: number
+          id: number
+        }
+        Insert: {
+          content?: string | null
+          createdAt?: string
+          createdBy?: string | null
+          documentId: number
+          id?: number
+        }
+        Update: {
+          content?: string | null
+          createdAt?: string
+          createdBy?: string | null
+          documentId?: number
+          id?: number
+        }
+        Relationships: []
+      }
       courses: {
         Row: {
           createdAt: string

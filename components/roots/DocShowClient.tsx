@@ -4,9 +4,11 @@ import { EmojiContainer } from "@/components/EmojiContainer";
 import { EmojiEmoCircle } from "@/components/EmojiEmocircle";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
+import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { Database } from "../../database.types";
+import { backup } from "../../utils/backup";
 import { DirectoryNavigation } from "../DirectoryNavigation";
 import { TitleEditor } from "../TitleEditor";
 export function DocShowClient({
@@ -34,6 +36,24 @@ export function DocShowClient({
   const handleEditorReady = (editor: BlockNoteEditor | null) => {
     console.log("handleEditorReady");
     setEditor(editor);
+  };
+
+  const [lastBackup, setLastBackup] = useState<dayjs.Dayjs | null>(null);
+  const [hasBackupError, setHasBackupError] = useState(false);
+
+  const backupWithState = async (editor: BlockNoteEditor) => {
+    console.log("backupWithState Start");
+    const { error, data } = await backup(editor, +id);
+    console.log("backup returned, data", data);
+    if (data) {
+      const parsedDate = dayjs(data.createdAt); // Parsing the datetime string to a Day.js object
+      setLastBackup(parsedDate); // Now it's a Day.js object, compatible with the state type
+      console.log("backupWithState: backup success");
+      setHasBackupError(false);
+    } else {
+      console.error(error);
+      setHasBackupError(true);
+    }
   };
 
   const [editable, setEditable] = useState(true);
@@ -121,8 +141,16 @@ export function DocShowClient({
         />
       </div>
 
-      <div className="my-2">
+      <div className="my-2 flex gap-2 items-center">
         <TitleEditor initialTitle={name} id={id} />
+        {hasBackupError && (
+          <div className="text-red-500 text-sm">저장에 실패했습니다.</div>
+        )}
+        {lastBackup && (
+          <div className="text-gray-400 text-sm">
+            {lastBackup?.format("HH:mm:ss")}에 저장됨
+          </div>
+        )}
       </div>
       <div className="py-4 px-56 flex-grow flex flex-col">
         <Editor
@@ -131,6 +159,7 @@ export function DocShowClient({
           userName={user?.user_metadata?.full_name}
           docCollabKey={docCollabKey}
           documentId={+id}
+          editorBackupFn={backupWithState}
         />
       </div>
       <div className="w-full flex justify-end relative">

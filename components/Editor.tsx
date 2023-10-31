@@ -13,6 +13,7 @@ import {
   createReactBlockSpec,
   useBlockNote,
 } from "@blocknote/react";
+import { debounce } from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import YPartyKitProvider from "y-partykit/provider";
@@ -77,6 +78,7 @@ export const Editor = ({
   userName,
   docCollabKey,
   documentId,
+  editorBackupFn,
 }: {
   onEditorReady?: (editor: BlockNoteEditor | null) => void;
   setTextCursorBlockId?: (blockId: string | null) => void;
@@ -89,6 +91,7 @@ export const Editor = ({
   userName?: string;
   docCollabKey: string;
   documentId: number;
+  editorBackupFn: (editor: BlockNoteEditor) => void;
 }) => {
   const {
     setFocusedBlockId: setFocusedBlockIdGlobal,
@@ -103,6 +106,8 @@ export const Editor = ({
     );
     return [doc, provider];
   }, []);
+
+  const debouncedBackup = debounce(editorBackupFn, 3000);
 
   const [editorEmojiStatus, setEditorEmojiStatus] = useState<
     EditorEmojiStatus[]
@@ -335,6 +340,8 @@ export const Editor = ({
     onEditorContentChange: (editor: BlockNoteEditor) => {
       updateAllEditorEmojiHeight(editor);
       updateFocusedBlockHeight();
+      console.log("onEditorContentChange");
+      debouncedBackup(editor);
     },
     onEditorReady: (editor: BlockNoteEditor) => {
       editorRef.current = editor;
